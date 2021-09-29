@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PrepodSearch</string>
+
+    <string-array name="Факультеты">
+        <item>УИТС</item>
+        <item>ПМА</item>
+        <item>ЭиХТ</item>
+        <item>ФЭиУ</item>
+        <item>Технологический</item>
+        <item>СПО</item>
+        <item>ГОиВ</item>
+    </string-array>
+</resources>
