@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         val bindingView = binding.root
         setContentView(bindingView)
 
+        var check = 0
 
         val facultySpinnerData = resources.getStringArray(R.array.Факультеты).toMutableList()
         val facultyAdapter = ArrayAdapter(
@@ -32,23 +33,27 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.apply {
-            facultySpinner.adapter = facultyAdapter
-            facultySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+
+            facultySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    pos: Int,
+                    id: Long
+                ) {
 
 
+                    if (++check > 1) {
+
+                        val tempData = parent?.getItemAtPosition(0)
+                        facultySpinnerData[0] = parent?.getItemAtPosition(pos).toString()
+                        facultySpinnerData[pos] = tempData.toString()
+                        facultySpinner.setSelection(0)
+                        println(facultySpinnerData)
 
 
-                    println(facultySpinnerData[0])
-                    facultySpinner.setSelection(pos)
-
-
-                    val tempData = parent?.getItemAtPosition(pos).toString()
-                    facultySpinnerData[0] = tempData
-                    facultySpinnerData[pos] = parent?.getItemAtPosition(0).toString()
-
-                    println(tempData)
-                    facultyAdapter.notifyDataSetChanged()
+                        facultyAdapter.notifyDataSetChanged()
+                    }
 
                 }
 
@@ -57,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
+            facultySpinner.adapter = facultyAdapter
         }
 
 
