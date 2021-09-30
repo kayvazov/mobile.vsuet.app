@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Teacher::class], version = 0)
+@Database(entities = [Teacher::class], version = 1)
 abstract class TeacherDataBase : RoomDatabase() {
 
     abstract val teacherDataBaseDao: TeacherDAO

@@ -10,5 +10,7 @@ data class LessonPair(
     @ColumnInfo(name = "lessonName") val lessonName: String,
     @ColumnInfo(name = "lessonTime") val lessonTime: String,
     @ColumnInfo(name = "lessonClass") val lessonClass: Int,
-    @ColumnInfo(name = "lessonTeacher") val lessonTeacher: String
+    @ColumnInfo(name = "lessonTeacher") val lessonTeacher: String,
+    @ColumnInfo(name = "lessonDay") val lessonDay: String,
+    @ColumnInfo(name = "numerator") val numerator: Boolean
 )

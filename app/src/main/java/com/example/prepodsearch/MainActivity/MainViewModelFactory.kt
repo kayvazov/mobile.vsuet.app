@@ -1,4 +1,4 @@
-package com.example.prepodsearch
+package com.example.prepodsearch.MainActivity
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
