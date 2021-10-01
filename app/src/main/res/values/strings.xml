@@ -5,11 +5,17 @@
         <item>УИТС</item>
         <item>ПМА</item>
         <item>ЭиХТ</item>
-        <item>ФЭиУ</item>
+        <item>ЭиУ</item>
         <item>Технологический</item>
-        <item>СПО</item>
-        <item>ГОиВ</item>
+
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- HardCodedValues -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="facultyStartingItem">УИТС</string>
+    <string name="searchButtonText">Поиск</string>
+    <string name="teacherText">Преподаватель</string>
+    <string name="facultyText">Факультет</string>
+    <string name="emptySpace">emptySpace</string>
+    <string name="okButtonText">ОК</string>
 </resources>

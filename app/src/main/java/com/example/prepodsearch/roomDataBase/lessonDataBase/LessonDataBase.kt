@@ -1,4 +1,4 @@
-package com.example.prepodsearch.RoomDataBase.LessonDataBase
+package com.example.prepodsearch.roomDataBase.lessonDataBase
 
 import android.content.Context
 import androidx.room.Database

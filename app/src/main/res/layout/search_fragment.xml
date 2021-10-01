@@ -5,16 +5,16 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="40dp"
-    tools:context=".searchDialogFragment.SearchDialogFragment">
+    tools:context=".searchFragment.SearchFragment">
 
     <TextView
         android:id="@+id/responseMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:minWidth="200dp"
-        android:minHeight="200dp"
-        android:text="TextView"
+        android:minWidth="100dp"
+        android:minHeight="100dp"
+        android:text="@string/emptySpace"
         android:textColor="#000000"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,9 +25,20 @@
         android:id="@+id/okButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="#000000"
-        android:text="ОК"
+        android:text="@string/okButtonText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leftLessonsText" />
+
+    <TextView
+        android:id="@+id/leftLessonsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/emptySpace"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/responseMessage" />

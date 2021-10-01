@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/choiceFragment">
+
+    <fragment
+        android:id="@+id/choiceFragment"
+        android:name="com.example.prepodsearch.choiceFragment.ChoiceFragment"
+        android:label="choice_fragment"
+        tools:layout="@layout/choice_fragment" >
+        <action
+            android:id="@+id/fromChoiceToSearchResult"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.prepodsearch.searchFragment.SearchFragment"
+        android:label="fragment_search_dialog"
+        tools:layout="@layout/search_fragment" >
+        <argument android:name="teacherName" />
+        <action
+            android:id="@+id/returnFromSearchResult"
+            app:destination="@id/choiceFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out" />
+    </fragment>
+</navigation>

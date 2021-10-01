@@ -1,4 +1,4 @@
-package com.example.prepodsearch.RoomDataBase.TeacherDataBase
+package com.example.prepodsearch.roomDataBase.teacherDataBase
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -10,9 +10,6 @@ interface TeacherDAO {
 
     @Query("SELECT * FROM teacher WHERE teacherFaculty like :faculty")
     fun getFacultyTeachers(faculty: String): LiveData<List<Teacher>>
-
-    @Query("SELECT * FROM teacher WHERE teacherName like :teacherName")
-    fun getTeacher(teacherName: String): Teacher
 
 
 }
