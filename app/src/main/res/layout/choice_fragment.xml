@@ -12,7 +12,7 @@
 
         <Button
             android:id="@+id/teacherContainer"
-            android:layout_width="320dp"
+            android:layout_width="250dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="#ffffff"
@@ -20,8 +20,8 @@
             android:text="@string/emptySpace"
             android:textAllCaps="false"
             android:textColor="#000000"
-            android:textSize="20sp"
-            app:cornerRadius="0dp"
+            android:textSize="16sp"
+            app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +30,7 @@
 
         <Button
             android:id="@+id/facultyContainer"
-            android:layout_width="320dp"
+            android:layout_width="250dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="#ffffff"
@@ -38,22 +38,24 @@
             android:text="@string/facultyStartingItem"
             android:textAllCaps="false"
             android:textColor="#000000"
-            android:textSize="20sp"
-            app:cornerRadius="0dp"
+            android:textSize="16sp"
+            app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/facultyText"
-            app:strokeWidth="1dp" />
+            app:strokeWidth="1dp"
+            tools:cornerRadius="3dp" />
 
         <Button
             android:id="@+id/searchButton"
             android:layout_width="250dp"
             android:layout_height="60dp"
             android:layout_marginTop="116dp"
-            android:backgroundTint="#000000"
+            android:backgroundTint="@color/black"
             android:text="@string/searchButtonText"
             android:textSize="22sp"
+            app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"

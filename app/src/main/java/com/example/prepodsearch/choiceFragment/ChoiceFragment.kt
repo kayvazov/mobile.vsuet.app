@@ -25,20 +25,18 @@ class ChoiceFragment : Fragment() {
 
             searchButton.setOnClickListener {
                 val teacherNameArg = binding.teacherContainer.text.toString()
-
                 findNavController().navigate(ChoiceFragmentDirections.fromChoiceToSearchResult(teacherNameArg))
 
             }
 
 
             teacherContainer.setOnClickListener {
-                val dialog = ListDialogFragment("Teacher", facultyContainer.text.toString())
+                val dialog = ListDialogFragment("Teacher", facultyContainer.text.toString(), null)
                 dialog.show(requireActivity().supportFragmentManager, "teacherChoice")
             }
 
             facultyContainer.setOnClickListener {
-                val dialog = ListDialogFragment("Faculty", null)
-
+                val dialog = ListDialogFragment("Faculty", null, null)
                 dialog.show(requireActivity().supportFragmentManager, "facultyChoice")
 
             }

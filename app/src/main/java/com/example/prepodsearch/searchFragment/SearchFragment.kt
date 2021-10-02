@@ -5,10 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.prepodsearch.RecyclerViewAdapter.LessonRecyclerViewAdapter
 import com.example.prepodsearch.databinding.SearchFragmentBinding
+import com.example.prepodsearch.listDialogFragment.ListDialogFragment
 import com.example.prepodsearch.roomDataBase.lessonDataBase.LessonDataBase
 import com.example.prepodsearch.roomDataBase.lessonDataBase.LessonPair
 import java.text.SimpleDateFormat
@@ -21,7 +26,7 @@ class SearchFragment :
     private lateinit var binding: SearchFragmentBinding
     private lateinit var viewModel: SearchFragmentViewModel
     private lateinit var viewModelFactory: SearchFragmentFactory
-
+    private lateinit var marginTopToChange: ConstraintLayout.LayoutParams
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +43,10 @@ class SearchFragment :
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(SearchFragmentViewModel::class.java)
 
+
+        marginTopToChange = binding.teacherNameContainer.layoutParams as ConstraintLayout.LayoutParams
+        marginTopToChange.setMargins(0,350,0,0)
+        binding.teacherNameContainer.layoutParams = marginTopToChange
 
         checkPair()
 
@@ -135,16 +144,20 @@ class SearchFragment :
             "18:50-20:25"
         } else "Перерыв"
 
-        if (lessonsEnd != null && lessonsEnd < time) {
+        if (lessonsEnd != null && timeComparator(time.split(":"), lessonsEnd.split(""))) {
             pairTime = "Рабочий день закончен"
         }
-        if (lessonsStart != null && lessonsStart > time) {
+        if (lessonsStart != null && timeComparator(lessonsStart.split(""), time.split(":"))) {
             pairTime = "Рабочий день ещё не начался"
         }
+
+        if (dayOfWeek == "Воскресенье" || teachersLessons.value == null) pairTime = "Выходной"
 
 
         var currentLesson: LessonPair? = null
         val nextPairCheck = teachersLessons.value?.size
+        val recyclerAdapter = LessonRecyclerViewAdapter()
+        val leftLessons = mutableListOf<LessonPair>()
         if (pairTime == "Перерыв" && teachersLessons.value != null) {
             for (lessons in 1..nextPairCheck!!) {
                 if (teachersLessons.value!![lessons].lessonTime.split("-")[1] < time && time < teachersLessons.value!![lessons + 1].lessonTime.split(
@@ -155,21 +168,28 @@ class SearchFragment :
                 }
             }
         } else if (teachersLessons.value != null) {
+
+            // ВАЖНОЕ МЕСТО, ВОЗМОЖНО, НУЖНО ПОМЕНЯТЬ
+
+            binding.lessonTable.apply {
+                visibility = View.VISIBLE
+                adapter = recyclerAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+            }
             for (lessons in 0..nextPairCheck!!) {
                 if (teachersLessons.value!![lessons].lessonTime == pairTime) currentLesson =
                     teachersLessons.value!![lessons]
                 if (teachersLessons.value!![lessons].lessonTime.split("-")[1] > time) {
-                    if (binding.leftLessonsText.text == "") {
-                        "Оставшиеся пары преподавателя на сегодня: \n Предмет  Аудитория  Время проведения \n".also {
-                            binding.leftLessonsText.text = it
-                        }
-                        binding.leftLessonsText.visibility = View.VISIBLE
-                    }
-                    (binding.leftLessonsText.text.toString() + "${teachersLessons.value!![lessons].lessonName} + ${teachersLessons.value!![lessons].lessonClass} + ${teachersLessons.value!![lessons].lessonTime} \n").also {
-                        binding.leftLessonsText.text = it
-                    }
+                    leftLessons.add(teachersLessons.value!![lessons])
                 }
             }
+            binding.apply{
+                lessonTable.visibility = View.VISIBLE
+                leftLessonsText.visibility = View.VISIBLE
+                marginTopToChange.setMargins(0,0,0,0)
+                responseMessage.layoutParams = marginTopToChange
+            }
+            recyclerAdapter.data = leftLessons
         }
 
 
@@ -177,16 +197,31 @@ class SearchFragment :
         val lessonName = currentLesson?.lessonName
         val lessonClass = currentLesson?.lessonClass
 
-
         binding.apply {
             responseMessage.text = when (pairTime) {
                 "Перерыв" -> "Сейчас перерыв, следующая пара преподавателя - $lessonName, она пройдёт в $lessonClass аудитории, время проведения - $lessonTime"
                 "Рабочий день не начался" -> "Рабочий день ещё не начался"
                 "Рабочий день окончен" -> "Рабочий день окончен"
+                "Выходной" -> "Сегодня у преподавателя нет пар"
                 else -> "Сейчас $teacherName ведёт $lessonName в $lessonClass аудитории, время проведения - $lessonTime"
             }
 
+            "Преподаватель: \n$teacherName".also { teacherNameContainer.text = it }
+            println(teacherName)
 
+            println(teacherNameContainer.marginTop)
+
+        }
+
+
+        if (pairTime == "Выходной") {
+            binding.otherDayButton.apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    val dialog = ListDialogFragment("OtherDay", null, teacherName)
+                    dialog.show(requireActivity().supportFragmentManager, "OtherDayChoice")
+                }
+            }
         }
 
 

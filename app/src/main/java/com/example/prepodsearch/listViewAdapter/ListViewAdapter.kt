@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.example.prepodsearch.R
 
-class ListViewAdapter : BaseAdapter() {
+class ListViewAdapter() : BaseAdapter() {
 
     var data = listOf<Any>()
         set(value) {

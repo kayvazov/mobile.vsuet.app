@@ -7,15 +7,24 @@
         <item>ЭиХТ</item>
         <item>ЭиУ</item>
         <item>Технологический</item>
+    </string-array>
 
+    <string-array name="daysOfTheWeek">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
     </string-array>
 
     <!-- HardCodedValues -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facultyStartingItem">УИТС</string>
     <string name="searchButtonText">Поиск</string>
     <string name="teacherText">Преподаватель</string>
     <string name="facultyText">Факультет</string>
     <string name="emptySpace">emptySpace</string>
     <string name="okButtonText">ОК</string>
+    <string name="takeAnotherDay">Выбрать другой день недели</string>
+    <string name="leftLessons">Следующие пары</string>
 </resources>
