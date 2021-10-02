@@ -18,13 +18,16 @@ import com.example.prepodsearch.roomDataBase.teacherDataBase.Teacher
 import com.example.prepodsearch.roomDataBase.teacherDataBase.TeacherDataBase
 import java.util.*
 
-class ListDialogFragment(private val type: String, private val faculty: String?, private val teacherName: String?) :
+class ListDialogFragment(
+    private val type: String,
+    private val faculty: String?,
+    private val teacherName: String?
+) :
     DialogFragment() {
 
     private lateinit var binding: ListDialogFragmentBinding
     private lateinit var viewModelFactory: ListViewModelFactory
     private lateinit var viewModel: ListDialogViewModel
-
 
 
     override fun onCreateView(
@@ -55,12 +58,12 @@ class ListDialogFragment(private val type: String, private val faculty: String?,
         val lessonDataSource = lessonDataBase.lessonDataBaseDao
         val application = requireNotNull(activity).application
 
-        viewModelFactory = ListViewModelFactory(lessonDataSource,teacherDataSource, application)
+        viewModelFactory = ListViewModelFactory(lessonDataSource, teacherDataSource, application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ListDialogViewModel::class.java)
         adapter.data =
             if (type == "Teacher" && viewModel.getFacultyTeachers(faculty!!).value != null) {
                 getTeachersNames(viewModel.getFacultyTeachers(faculty).value!!)
-            } else if (type == "Faculty"){
+            } else if (type == "Faculty") {
                 resources.getStringArray(R.array.Факультеты).toMutableList()
             } else {
                 resources.getStringArray(R.array.daysOfTheWeek).toMutableList()
@@ -84,12 +87,13 @@ class ListDialogFragment(private val type: String, private val faculty: String?,
             }
 
             if (type == "Teacher") teacherText.text = adapter.data[position].toString()
-            else if(type == "Faculty") facultyText.text = adapter.data[position].toString()
+            else if (type == "Faculty") facultyText.text = adapter.data[position].toString()
             else {
                 val numerator = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0
                 val day = adapter.data[position].toString()
-                val teacherLessons = viewModel.getTeachersLesson(teacherName!!, day, numerator).value
-                if(teacherLessons != null) {
+                val teacherLessons =
+                    viewModel.getTeachersLesson(teacherName!!, day, numerator).value
+                if (teacherLessons != null) {
                     val recyclerAdapter = LessonRecyclerViewAdapter()
                     lessonsTable.adapter = recyclerAdapter
                     lessonsTable.layoutManager = LinearLayoutManager(requireContext())
@@ -98,7 +102,8 @@ class ListDialogFragment(private val type: String, private val faculty: String?,
                     lessonsTable.visibility = View.VISIBLE
                 } else {
                     responseMessage.text = "В этот день у преподавателя нет пар"
-                    if(day == dayOfWeek) responseMessage.text = "Сегодня у преподавателя нет пар"
+                    if (day == dayOfWeek) responseMessage.text =
+                        "Сегодня у преподавателя нет пар"
                 }
 
             }

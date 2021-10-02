@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -44,8 +43,9 @@ class SearchFragment :
             ViewModelProvider(this, viewModelFactory).get(SearchFragmentViewModel::class.java)
 
 
-        marginTopToChange = binding.teacherNameContainer.layoutParams as ConstraintLayout.LayoutParams
-        marginTopToChange.setMargins(0,350,0,0)
+        marginTopToChange =
+            binding.teacherNameContainer.layoutParams as ConstraintLayout.LayoutParams
+        marginTopToChange.setMargins(0, 350, 0, 0)
         binding.teacherNameContainer.layoutParams = marginTopToChange
 
         checkPair()
@@ -183,10 +183,10 @@ class SearchFragment :
                     leftLessons.add(teachersLessons.value!![lessons])
                 }
             }
-            binding.apply{
+            binding.apply {
                 lessonTable.visibility = View.VISIBLE
                 leftLessonsText.visibility = View.VISIBLE
-                marginTopToChange.setMargins(0,0,0,0)
+                marginTopToChange.setMargins(0, 0, 0, 0)
                 responseMessage.layoutParams = marginTopToChange
             }
             recyclerAdapter.data = leftLessons
@@ -207,20 +207,17 @@ class SearchFragment :
             }
 
             "Преподаватель: \n$teacherName".also { teacherNameContainer.text = it }
-            println(teacherName)
 
-            println(teacherNameContainer.marginTop)
 
         }
 
 
-        if (pairTime == "Выходной") {
-            binding.otherDayButton.apply {
-                visibility = View.VISIBLE
-                setOnClickListener {
-                    val dialog = ListDialogFragment("OtherDay", null, teacherName)
-                    dialog.show(requireActivity().supportFragmentManager, "OtherDayChoice")
-                }
+
+        binding.otherDayButton.apply {
+            visibility = View.VISIBLE
+            setOnClickListener {
+                val dialog = ListDialogFragment("OtherDay", null, teacherName)
+                dialog.show(requireActivity().supportFragmentManager, "OtherDayChoice")
             }
         }
 

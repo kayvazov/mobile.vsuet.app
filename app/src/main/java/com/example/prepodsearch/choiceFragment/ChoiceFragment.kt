@@ -25,7 +25,11 @@ class ChoiceFragment : Fragment() {
 
             searchButton.setOnClickListener {
                 val teacherNameArg = binding.teacherContainer.text.toString()
-                findNavController().navigate(ChoiceFragmentDirections.fromChoiceToSearchResult(teacherNameArg))
+                findNavController().navigate(
+                    ChoiceFragmentDirections.fromChoiceToSearchResult(
+                        teacherNameArg
+                    )
+                )
 
             }
 
@@ -46,7 +50,6 @@ class ChoiceFragment : Fragment() {
         return binding.root
 
     }
-
 
 
 }
