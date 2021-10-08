@@ -21,7 +21,7 @@ class ListDialogViewModel(
     fun getTeachersLesson(
         teacherName: String,
         day: String,
-        numerator: Boolean
+        numerator: Int
     ): LiveData<List<LessonPair>> {
         return lessonDataSource.getTeachersLessons(teacherName, day, numerator)
     }

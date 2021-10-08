@@ -11,6 +11,11 @@ interface LessonDao {
     fun getCurrentLesson(time: String, teacher: String): LiveData<LessonPair>
 
     @Query("SELECT * FROM lessonPair WHERE lessonTeacher like :teacherName AND lessonDay like :day AND numerator like :numerator")
-    fun getTeachersLessons(teacherName: String, day: String, numerator: Boolean) : LiveData<List<LessonPair>>
+    fun getTeachersLessons(teacherName: String, day: String, numerator: Int) : LiveData<List<LessonPair>>
+
+    @Query("SELECT * FROM lessonPair")
+    fun getAllLessons() : LiveData<List<LessonPair>>
+
+
 
 }

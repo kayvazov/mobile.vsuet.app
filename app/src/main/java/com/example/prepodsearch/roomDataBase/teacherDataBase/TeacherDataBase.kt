@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Teacher::class], version = 1)
+@Database(entities = [Teacher::class], version = 5)
 abstract class TeacherDataBase : RoomDatabase() {
 
     abstract val teacherDataBaseDao: TeacherDAO
@@ -23,7 +23,7 @@ abstract class TeacherDataBase : RoomDatabase() {
                         context.applicationContext,
                         TeacherDataBase::class.java,
                         "lessonsDatabase"
-                    ).fallbackToDestructiveMigration().build()
+                    ).fallbackToDestructiveMigration().createFromAsset("database/teacher.db").build()
                     INSTANCE = instance
                 }
                 return instance

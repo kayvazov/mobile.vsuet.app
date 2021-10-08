@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.prepodsearch.databinding.ChoiceFragmentBinding
 import com.example.prepodsearch.listDialogFragment.ListDialogFragment
+import com.example.prepodsearch.roomDataBase.teacherDataBase.TeacherDataBase
 
 class ChoiceFragment : Fragment() {
 
     private lateinit var binding: ChoiceFragmentBinding
+    private lateinit var viewModel: ChoiceViewModel
+    private lateinit var viewModelFactory: ChoiceViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -19,6 +23,12 @@ class ChoiceFragment : Fragment() {
     ): View {
 
         binding = ChoiceFragmentBinding.inflate(inflater)
+
+        val teacherDataBase = TeacherDataBase.getInstance(requireActivity().applicationContext)
+        val teacherDataSource = teacherDataBase.teacherDataBaseDao
+        val application = requireNotNull(activity).application
+        viewModelFactory = ChoiceViewModelFactory(teacherDataSource, application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ChoiceViewModel::class.java)
 
 
         binding.apply {
@@ -31,6 +41,13 @@ class ChoiceFragment : Fragment() {
                     )
                 )
 
+            }
+
+            val teacherData = viewModel.getFacultyTeachers(facultyContainer.text.toString())
+            teacherData.observeForever {
+                if (it.isNotEmpty()) {
+                    teacherContainer.text = it[0].teacherName
+                }
             }
 
 

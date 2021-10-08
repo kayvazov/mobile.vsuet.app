@@ -1,5 +1,6 @@
-package com.example.prepodsearch.RecyclerViewAdapter
+package com.example.prepodsearch.recyclerViewAdapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,6 +10,7 @@ import com.example.prepodsearch.roomDataBase.lessonDataBase.LessonPair
 class LessonRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
 
     var data = listOf<LessonPair>()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -18,10 +20,11 @@ class LessonRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
         return data.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: LessonViewHolder, position: Int) {
         val item = data[position]
         holder.apply {
-            lessonClass.text = item.lessonClass.toString()
+            lessonClass.text = item.lessonClass + " ауд."
             lessonName.text = item.lessonName
             lessonTime.text = item.lessonTime
         }

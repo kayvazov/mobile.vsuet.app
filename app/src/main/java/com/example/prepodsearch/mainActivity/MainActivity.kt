@@ -15,10 +15,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(bindingView)
 
 
-
-
-
-
     }
 
 

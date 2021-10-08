@@ -4,13 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.prepodsearch.R
-import com.example.prepodsearch.RecyclerViewAdapter.LessonRecyclerViewAdapter
+import com.example.prepodsearch.recyclerViewAdapter.LessonRecyclerViewAdapter
 import com.example.prepodsearch.databinding.ListDialogFragmentBinding
 import com.example.prepodsearch.listViewAdapter.ListViewAdapter
 import com.example.prepodsearch.roomDataBase.lessonDataBase.LessonDataBase
@@ -45,7 +47,7 @@ class ListDialogFragment(
             val teachersNames = mutableListOf<String>()
             if (teachers != null) {
                 for (teacher in teachers) {
-                    teachersNames.add(teacher.teacherName)
+                    teachersNames.add(teacher.teacherName!!)
                 }
             }
 
@@ -58,21 +60,29 @@ class ListDialogFragment(
         val lessonDataSource = lessonDataBase.lessonDataBaseDao
         val application = requireNotNull(activity).application
 
+
         viewModelFactory = ListViewModelFactory(lessonDataSource, teacherDataSource, application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ListDialogViewModel::class.java)
         adapter.data =
-            if (type == "Teacher" && viewModel.getFacultyTeachers(faculty!!).value != null) {
-                getTeachersNames(viewModel.getFacultyTeachers(faculty).value!!)
-            } else if (type == "Faculty") {
+            if (type == "Faculty") {
                 resources.getStringArray(R.array.Факультеты).toMutableList()
             } else {
                 resources.getStringArray(R.array.daysOfTheWeek).toMutableList()
             }
 
+        if (faculty != null) {
+            val teacherData = viewModel.getFacultyTeachers(faculty)
+            teacherData.observeForever {
+                if (type == "Teacher") {
+                    adapter.data = getTeachersNames(it)
+                }
+            }
+        }
+
         binding.listViewContainer.setOnItemClickListener { _, _, position, _ ->
 
-            val facultyText = requireActivity().findViewById<TextView>(R.id.facultyContainer)
-            val teacherText = requireActivity().findViewById<TextView>(R.id.teacherContainer)
+            val facultyText = requireActivity().findViewById<Button>(R.id.facultyContainer)
+            val teacherText = requireActivity().findViewById<Button>(R.id.teacherContainer)
             val lessonsTable = requireActivity().findViewById<RecyclerView>(R.id.lessonTable)
             val responseMessage = requireActivity().findViewById<TextView>(R.id.responseMessage)
 
@@ -86,26 +96,48 @@ class ListDialogFragment(
                 else -> "Понедельник"
             }
 
-            if (type == "Teacher") teacherText.text = adapter.data[position].toString()
-            else if (type == "Faculty") facultyText.text = adapter.data[position].toString()
-            else {
-                val numerator = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0
-                val day = adapter.data[position].toString()
-                val teacherLessons =
-                    viewModel.getTeachersLesson(teacherName!!, day, numerator).value
-                if (teacherLessons != null) {
-                    val recyclerAdapter = LessonRecyclerViewAdapter()
-                    lessonsTable.adapter = recyclerAdapter
-                    lessonsTable.layoutManager = LinearLayoutManager(requireContext())
-                    recyclerAdapter.data = teacherLessons
-                    responseMessage.visibility = View.GONE
-                    lessonsTable.visibility = View.VISIBLE
-                } else {
-                    responseMessage.text = "В этот день у преподавателя нет пар"
-                    if (day == dayOfWeek) responseMessage.text =
-                        "Сегодня у преподавателя нет пар"
+            when (type) {
+                "Teacher" -> teacherText.text = adapter.data[position].toString()
+                "Faculty" -> {
+                    facultyText.text = adapter.data[position].toString()
+                    val teacherData = viewModel.getFacultyTeachers(facultyText.text.toString())
+                    teacherData.observeForever {
+                        if (it.isNotEmpty()) {
+                            teacherText.text = it[0].teacherName
+                        }
+                    }
                 }
+                else -> {
+                    val numerator =
+                        if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0) {
+                            0
+                        } else {
+                            1
+                        }
+                    val day = adapter.data[position].toString()
+                    val teacherLessons =
+                        viewModel.getTeachersLesson(teacherName!!, day, numerator)
+                    teacherLessons.observeForever {
+                        if (it.isNotEmpty()) {
+                            val teacherNameContainer: TextView =
+                                requireActivity().findViewById(R.id.teacherNameContainer)
+                            val marginTopToChange =
+                                teacherNameContainer.layoutParams as ConstraintLayout.LayoutParams
+                            marginTopToChange.setMargins(0, 50, 0, 0)
+                            val recyclerAdapter = LessonRecyclerViewAdapter()
+                            lessonsTable.adapter = recyclerAdapter
+                            lessonsTable.layoutManager = LinearLayoutManager(requireContext())
+                            recyclerAdapter.data = it
+                            responseMessage.visibility = View.GONE
+                            lessonsTable.visibility = View.VISIBLE
+                        } else {
+                            responseMessage.text = "В этот день у преподавателя нет пар"
+                            if (day == dayOfWeek) responseMessage.text =
+                                "Сегодня у преподавателя нет пар"
+                        }
+                    }
 
+                }
             }
 
             dialog?.dismiss()

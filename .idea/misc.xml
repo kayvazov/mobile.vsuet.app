@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/GitProjects/PrepodSearch/app/src/main/res/drawable/bottom_stroke.xml" value="0.403125" />
         <entry key="..\:/GitProjects/PrepodSearch/app/src/main/res/drawable/spinner_background.xml" value="0.403125" />
         <entry key="..\:/GitProjects/PrepodSearch/app/src/main/res/layout/activity_main.xml" value="0.29347826086956524" />
         <entry key="..\:/GitProjects/PrepodSearch/app/src/main/res/layout/choice_fragment.xml" value="0.33" />
+        <entry key="..\:/GitProjects/PrepodSearch/app/src/main/res/layout/cock.xml" value="0.38697916666666665" />
         <entry key="..\:/GitProjects/PrepodSearch/app/src/main/res/layout/fragment_search_dialog.xml" value="0.350968351440718" />
         <entry key="..\:/GitProjects/PrepodSearch/app/src/main/res/layout/lesson_view_holder_item.xml" value="0.38697916666666665" />
         <entry key="..\:/GitProjects/PrepodSearch/app/src/main/res/layout/list_dialog_fragment.xml" value="0.38333333333333336" />

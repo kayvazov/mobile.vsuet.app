@@ -11,5 +11,8 @@ interface TeacherDAO {
     @Query("SELECT * FROM teacher WHERE teacherFaculty like :faculty")
     fun getFacultyTeachers(faculty: String): LiveData<List<Teacher>>
 
+    @Query("SELECT * FROM teacher")
+    fun getAllTeachers() : List<Teacher>
+
 
 }

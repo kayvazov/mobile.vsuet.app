@@ -9,8 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.prepodsearch.RecyclerViewAdapter.LessonRecyclerViewAdapter
+import com.example.prepodsearch.recyclerViewAdapter.LessonRecyclerViewAdapter
 import com.example.prepodsearch.databinding.SearchFragmentBinding
 import com.example.prepodsearch.listDialogFragment.ListDialogFragment
 import com.example.prepodsearch.roomDataBase.lessonDataBase.LessonDataBase
@@ -37,7 +36,6 @@ class SearchFragment :
         val lessonDataBase = LessonDataBase.getInstance(requireActivity().applicationContext)
         val lessonDataSource = lessonDataBase.lessonDataBaseDao
         val application = requireNotNull(this.activity).application
-
         viewModelFactory = SearchFragmentFactory(lessonDataSource, application)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(SearchFragmentViewModel::class.java)
@@ -45,8 +43,8 @@ class SearchFragment :
 
         marginTopToChange =
             binding.teacherNameContainer.layoutParams as ConstraintLayout.LayoutParams
-        marginTopToChange.setMargins(0, 350, 0, 0)
-        binding.teacherNameContainer.layoutParams = marginTopToChange
+        marginTopToChange.setMargins(0, 250, 0, 0)
+
 
         checkPair()
 
@@ -61,11 +59,18 @@ class SearchFragment :
 
     private fun timeComparator(firstTime: List<String>, secondTime: List<String>): Boolean {
 
-        return when {
-            firstTime[0].toInt() >= secondTime[0].toInt() -> true
-            firstTime[0].toInt() == secondTime[0].toInt() -> firstTime[1].toInt() >= secondTime[1].toInt()
-            else -> false
+        return if (firstTime[0] != "" && secondTime[0] != "" && firstTime[0] != secondTime[0]) {
+            firstTime[0].toInt() > secondTime[0].toInt()
+        } else {
+            if (firstTime[1] != "" && secondTime[1] != "") {
+                firstTime[1].toInt() >= secondTime[1].toInt()
+            } else {
+                if (firstTime[1] == "" && secondTime[1] == "") {
+                    true
+                } else firstTime[1] != ""
+            }
         }
+
 
     }
 
@@ -87,13 +92,26 @@ class SearchFragment :
             else -> "Понедельник"
         }
 
-        val numerator = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0
+        val numerator = if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0) {
+            0
+        } else {
+            1
+        }
+        var pairTime: String
         val teachersLessons =
             viewModel.getTeachersLessons(teacherName.toString(), dayOfWeek, numerator)
-        val lessonsEnd = teachersLessons.value?.last()?.lessonTime?.split("-")?.last()
-        val lessonsStart = teachersLessons.value?.first()?.lessonTime?.split("-")?.first()
+        var lessonsEnd = ""
+        var lessonsStart = ""
+        teachersLessons.observeForever {
 
-        var pairTime: String
+            if (it.isNotEmpty()) {
+                lessonsEnd = it.last().lessonTime.split("-").last()
+                lessonsStart = it.first().lessonTime.split("-").first()
+            }
+            if (dayOfWeek == "Воскресенье" || it.isEmpty()) pairTime = "Выходной"
+        }
+
+
 
         pairTime = if (timeComparator(hoursMinutes, "8:00".split(":")) && timeComparator(
                 "9:45".split(":"),
@@ -144,52 +162,58 @@ class SearchFragment :
             "18:50-20:25"
         } else "Перерыв"
 
-        if (lessonsEnd != null && timeComparator(time.split(":"), lessonsEnd.split(""))) {
-            pairTime = "Рабочий день закончен"
-        }
-        if (lessonsStart != null && timeComparator(lessonsStart.split(""), time.split(":"))) {
-            pairTime = "Рабочий день ещё не начался"
-        }
-
-        if (dayOfWeek == "Воскресенье" || teachersLessons.value == null) pairTime = "Выходной"
-
 
         var currentLesson: LessonPair? = null
-        val nextPairCheck = teachersLessons.value?.size
+
         val recyclerAdapter = LessonRecyclerViewAdapter()
-        val leftLessons = mutableListOf<LessonPair>()
-        if (pairTime == "Перерыв" && teachersLessons.value != null) {
-            for (lessons in 1..nextPairCheck!!) {
-                if (teachersLessons.value!![lessons].lessonTime.split("-")[1] < time && time < teachersLessons.value!![lessons + 1].lessonTime.split(
-                        "-"
-                    )[0]
-                ) {
-                    currentLesson = teachersLessons.value!![lessons + 1]
-                }
-            }
-        } else if (teachersLessons.value != null) {
 
-            // ВАЖНОЕ МЕСТО, ВОЗМОЖНО, НУЖНО ПОМЕНЯТЬ
+        teachersLessons.observeForever {
+            if (it.isNotEmpty()) {
+                lessonsEnd = it.last().lessonTime.split("-").last()
+                lessonsStart = it.first().lessonTime.split("-").first()
+                val leftLessons = mutableListOf<LessonPair>()
+                val nextPairCheck = it.size
+                if (pairTime == "Перерыв" && it.isNotEmpty()) {
+                    for (lessons in 1..nextPairCheck) {
+                        if (it[lessons].lessonTime.split("-")[1] < time && time < it[lessons + 1].lessonTime.split(
+                                "-"
+                            )[0]
+                        ) {
+                            currentLesson = it[lessons + 1]
+                        }
+                    }
+                } else if (it.isNotEmpty()) {
 
-            binding.lessonTable.apply {
-                visibility = View.VISIBLE
-                adapter = recyclerAdapter
-                layoutManager = LinearLayoutManager(requireContext())
-            }
-            for (lessons in 0..nextPairCheck!!) {
-                if (teachersLessons.value!![lessons].lessonTime == pairTime) currentLesson =
-                    teachersLessons.value!![lessons]
-                if (teachersLessons.value!![lessons].lessonTime.split("-")[1] > time) {
-                    leftLessons.add(teachersLessons.value!![lessons])
+                    // ВАЖНОЕ МЕСТО, ВОЗМОЖНО, НУЖНО ПОМЕНЯТЬ
+                    for (lessons in 0..nextPairCheck) {
+                        if (it[lessons].lessonTime == pairTime) currentLesson =
+                            it[lessons]
+                        if (it[lessons].lessonTime.split("-")[1] > time) {
+                            leftLessons.add(it[lessons])
+                        }
+                    }
+                    binding.apply {
+                        lessonTable.visibility = View.VISIBLE
+                        leftLessonsText.visibility = View.VISIBLE
+                        marginTopToChange.setMargins(0, 0, 0, 0)
+                        responseMessage.layoutParams = marginTopToChange
+                    }
+                    recyclerAdapter.data = leftLessons
                 }
+                if (dayOfWeek == "Воскресенье" || it.isEmpty()) pairTime = "Выходной"
             }
-            binding.apply {
-                lessonTable.visibility = View.VISIBLE
-                leftLessonsText.visibility = View.VISIBLE
-                marginTopToChange.setMargins(0, 0, 0, 0)
-                responseMessage.layoutParams = marginTopToChange
-            }
-            recyclerAdapter.data = leftLessons
+            if (dayOfWeek == "Воскресенье" || it.isEmpty()) pairTime =
+                "Выходной"
+
+        }
+
+
+
+        if (timeComparator(time.split(":"), lessonsEnd.split(""))) {
+            pairTime = "Рабочий день окончен"
+        }
+        if (timeComparator(lessonsStart.split(""), time.split(":"))) {
+            pairTime = "Рабочий день не начался"
         }
 
 

@@ -6,10 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [LessonPair::class], version = 1)
+@Database(entities = [LessonPair::class], version = 3)
 abstract class LessonDataBase : RoomDatabase() {
 
     abstract val lessonDataBaseDao: LessonDao
+
 
     companion object {
         @Volatile
@@ -23,7 +24,8 @@ abstract class LessonDataBase : RoomDatabase() {
                         context.applicationContext,
                         LessonDataBase::class.java,
                         "lessonsDatabase"
-                    ).fallbackToDestructiveMigration().build()
+                    ).fallbackToDestructiveMigration().createFromAsset("database/lessonPair.db")
+                        .build()
                     INSTANCE = instance
                 }
                 return instance
