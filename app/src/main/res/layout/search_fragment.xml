@@ -5,46 +5,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:padding="30dp"
     tools:context=".searchFragment.SearchFragment">
 
     <TextView
         android:id="@+id/responseMessage"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
         android:minWidth="100dp"
-        android:minHeight="100dp"
         android:text="@string/emptySpace"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lessonTable" />
+        app:layout_constraintTop_toBottomOf="@+id/teacherNameContainer" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/numeratorSwitch"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/special_background"
+        android:gravity="center"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lessonTable"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/okButton"
         android:layout_width="250dp"
         android:layout_height="60dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="14dp"
         android:backgroundTint="#000000"
         android:text="@string/okButtonText"
         app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/responseMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/numeratorSwitch" />
 
     <Button
         android:id="@+id/otherDayButton"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="14dp"
         android:backgroundTint="#000000"
         android:text="@string/takeAnotherDay"
         android:visibility="visible"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/okButton" />
@@ -52,39 +70,37 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lessonTable"
         android:layout_width="0dp"
-        android:layout_height="315dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="350dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/spinner_background"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.793"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/leftLessonsText" />
+        app:layout_constraintTop_toBottomOf="@+id/responseMessage" />
 
     <TextView
         android:id="@+id/teacherNameContainer"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:text="@string/emptySpace"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/leftLessonsText"
+        android:id="@+id/dayContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/leftLessons"
-        android:textColor="#000000"
-        android:textSize="16sp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/teacherNameContainer" />
+        tools:layout_editor_absoluteX="177dp"
+        tools:layout_editor_absoluteY="347dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

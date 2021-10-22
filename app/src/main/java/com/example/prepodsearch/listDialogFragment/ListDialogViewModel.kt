@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.prepodsearch.roomDataBase.lessonDataBase.LessonDao
 import com.example.prepodsearch.roomDataBase.lessonDataBase.LessonPair
-import com.example.prepodsearch.roomDataBase.teacherDataBase.Teacher
 import com.example.prepodsearch.roomDataBase.teacherDataBase.TeacherDAO
 
 class ListDialogViewModel(
@@ -14,16 +13,12 @@ class ListDialogViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    fun getFacultyTeachers(faculty: String): LiveData<List<Teacher>> {
-        return teacherDataSource.getFacultyTeachers(faculty)
-    }
 
     fun getTeachersLesson(
         teacherName: String,
-        day: String,
-        numerator: Int
+        day: String
     ): LiveData<List<LessonPair>> {
-        return lessonDataSource.getTeachersLessons(teacherName, day, numerator)
+        return lessonDataSource.getTeachersLessons(teacherName, day)
     }
 
 

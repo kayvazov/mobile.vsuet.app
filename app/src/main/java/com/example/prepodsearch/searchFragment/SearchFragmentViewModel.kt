@@ -18,10 +18,8 @@ class SearchFragmentViewModel(
     fun getTeachersLessons(
         teacherName: String,
         day: String,
-        numerator: Int
     ): LiveData<List<LessonPair>> {
-        return lessonDataSource.getTeachersLessons(teacherName, day, numerator)
-
+        return lessonDataSource.getTeachersLessons(teacherName, day)
     }
 
 }

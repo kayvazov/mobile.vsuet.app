@@ -2,7 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/choiceFragment">
+    android:id="@+id/main_nav"
+    app:startDestination="@id/startMenuFragment">
 
     <fragment
         android:id="@+id/choiceFragment"
@@ -13,7 +14,7 @@
             android:id="@+id/fromChoiceToSearchResult"
             app:destination="@id/searchFragment"
             app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/slide_out"
+            app:exitAnim="@anim/slide_back"
             app:popEnterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
     </fragment>
@@ -26,9 +27,33 @@
         <action
             android:id="@+id/returnFromSearchResult"
             app:destination="@id/choiceFragment"
-            app:enterAnim="@anim/slide_in"
+            app:enterAnim="@anim/slide_straight"
             app:exitAnim="@anim/slide_out"
-            app:popEnterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out" />
+        <argument
+            android:name="numerator"
+            app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/startMenuFragment"
+        android:name="com.example.prepodsearch.startMenuFragment.StartMenuFragment"
+        android:label="fragment_start_menu"
+        tools:layout="@layout/fragment_start_menu">
+        <action
+            android:id="@+id/fromMenuToTeachers"
+            app:destination="@id/choiceFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/startMenuFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <action
+        android:id="@+id/goHomeAction"
+        app:destination="@id/startMenuFragment"
+        app:enterAnim="@anim/fade_in"
+        app:exitAnim="@anim/fade_out"
+        app:popEnterAnim="@anim/slide_in"
+        app:popExitAnim="@anim/slide_back" />
 </navigation>

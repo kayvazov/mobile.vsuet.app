@@ -9,8 +9,8 @@ import com.example.prepodsearch.roomDataBase.teacherDataBase.TeacherDAO
 class ChoiceViewModel(private val teacherDataSource: TeacherDAO, application: Application) :
     AndroidViewModel(application) {
 
-    fun getFacultyTeachers(faculty: String): LiveData<List<Teacher>> {
-        return teacherDataSource.getFacultyTeachers(faculty)
+    fun getTeachers(): LiveData<List<Teacher>> {
+        return teacherDataSource.getAllTeachers()
     }
 
 }
