@@ -11,31 +11,31 @@
         android:layout_width="180dp"
         android:layout_height="90dp"
         android:layout_marginTop="8dp"
-        android:text="Преподаватели"
+        android:text="@string/teachersMenuText"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/scheduleButton"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/vsuet_big_image" />
 
     <Button
         android:id="@+id/scheduleButton"
         android:layout_width="180dp"
         android:layout_height="90dp"
         android:layout_marginTop="8dp"
-        android:text="Расписание"
+        android:text="@string/scheduleMenuText"
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/teachersMenuButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/vsuet_big_image" />
 
     <Button
         android:id="@+id/newsButton"
         android:layout_width="180dp"
         android:layout_height="90dp"
         android:layout_marginTop="4dp"
-        android:text="Новости"
+        android:text="@string/newsMenuText"
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/ratingButton"
         app:layout_constraintHorizontal_bias="0.5"
@@ -47,7 +47,7 @@
         android:layout_width="180dp"
         android:layout_height="90dp"
         android:layout_marginTop="4dp"
-        android:text="Рейтинг"
+        android:text="@string/ratingMenuText"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -55,13 +55,16 @@
         app:layout_constraintTop_toBottomOf="@+id/teachersMenuButton" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/vsuet_big_image"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:src="@drawable/spinner_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/home_button_image"
+        app:tint="#00008b"
+        android:contentDescription="@string/emptySpace" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

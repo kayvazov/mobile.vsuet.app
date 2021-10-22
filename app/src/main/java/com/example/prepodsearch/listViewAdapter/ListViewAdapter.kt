@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.example.prepodsearch.R
 
 class ListViewAdapter : BaseAdapter() {
-
     var data = listOf<Any>()
         set(value) {
             field = value
@@ -32,13 +31,7 @@ class ListViewAdapter : BaseAdapter() {
     override fun getView(position: Int, view: View?, container: ViewGroup?): View {
         val layoutInflater = LayoutInflater.from(container?.context)
         val listViewItem = layoutInflater.inflate(R.layout.list_view_item, container, false)
-
         listViewItem.findViewById<TextView>(R.id.textContainer).text = data[position].toString()
-
-
         return listViewItem
-
     }
-
-
 }

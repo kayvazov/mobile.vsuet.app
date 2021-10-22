@@ -8,14 +8,11 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [LessonPair::class], version = 4)
 abstract class LessonDataBase : RoomDatabase() {
-
     abstract val lessonDataBaseDao: LessonDao
-
 
     companion object {
         @Volatile
         private var INSTANCE: LessonDataBase? = null
-
         fun getInstance(context: Context): LessonDataBase {
             synchronized(this) {
                 var instance = INSTANCE
@@ -31,7 +28,5 @@ abstract class LessonDataBase : RoomDatabase() {
                 return instance
             }
         }
-
     }
-
 }

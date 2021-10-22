@@ -9,7 +9,7 @@ import androidx.room.Query
 interface TeacherDAO {
 
     @Query("SELECT * FROM teacher")
-    fun getAllTeachers() : LiveData<List<Teacher>>
+    fun getAllTeachers(): LiveData<List<Teacher>>
 
 
 }
