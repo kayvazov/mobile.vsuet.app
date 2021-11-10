@@ -8,63 +8,109 @@
 
     <Button
         android:id="@+id/teachersMenuButton"
-        android:layout_width="180dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:text="@string/teachersMenuText"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/scheduleButton"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintEnd_toStartOf="@+id/guideline18"
+        app:layout_constraintStart_toStartOf="@+id/guideline17"
         app:layout_constraintTop_toBottomOf="@+id/vsuet_big_image" />
 
     <Button
-        android:id="@+id/scheduleButton"
-        android:layout_width="180dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/scheduleMenuButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:text="@string/scheduleMenuText"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@+id/teachersMenuButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline16"
         app:layout_constraintTop_toBottomOf="@+id/vsuet_big_image" />
 
     <Button
-        android:id="@+id/newsButton"
-        android:layout_width="180dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="4dp"
+        android:id="@+id/newsMenuButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:text="@string/newsMenuText"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@+id/ratingButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scheduleButton" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toStartOf="@+id/guideline19"
+        app:layout_constraintStart_toStartOf="@+id/guideline16"
+        app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
     <Button
-        android:id="@+id/ratingButton"
-        android:layout_width="180dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="4dp"
+        android:id="@+id/ratingMenuButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:text="@string/ratingMenuText"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/newsButton"
-        app:layout_constraintTop_toBottomOf="@+id/teachersMenuButton" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toStartOf="@+id/guideline18"
+        app:layout_constraintStart_toStartOf="@+id/guideline17"
+        app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
     <ImageView
         android:id="@+id/vsuet_big_image"
         android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:src="@drawable/spinner_background"
+        android:layout_height="0dp"
+        android:contentDescription="@string/emptySpace"
+        android:scaleType="fitXY"
+        android:src="@drawable/vsuet_background_image"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/home_button_image"
-        app:tint="#00008b"
-        android:contentDescription="@string/emptySpace" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.37" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.63" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.51" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.49" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

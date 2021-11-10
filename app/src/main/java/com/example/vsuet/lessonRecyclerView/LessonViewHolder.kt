@@ -1,0 +1,16 @@
+package com.example.vsuet.lessonRecyclerView
+
+import android.view.View
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.example.vsuet.R
+
+
+class LessonViewHolder(lessonTicket: View) : RecyclerView.ViewHolder(lessonTicket) {
+
+    val lessonTime : TextView = lessonTicket.findViewById(R.id.lessonTime)
+    val lessonName : TextView = lessonTicket.findViewById(R.id.lessonName)
+    val lessonTeacher : TextView = lessonTicket.findViewById(R.id.lessonTeacher)
+    val lessonClass : TextView = lessonTicket.findViewById(R.id.lessonClass)
+
+}

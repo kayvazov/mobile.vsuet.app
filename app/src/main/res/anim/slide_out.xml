@@ -3,7 +3,7 @@
 
     <!-- Смена экрана со второго на первый -->
     <translate
-        android:duration="@android:integer/config_shortAnimTime"
+        android:duration="300"
         android:fromXDelta="0%"
         android:interpolator="@android:anim/decelerate_interpolator"
         android:toXDelta="100%" />

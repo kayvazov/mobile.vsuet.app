@@ -10,6 +10,15 @@
         <item>Суббота</item>
     </string-array>
 
+    <string name="shortMonday">ПН</string>
+    <string name="shortTuesday">ВТ</string>
+    <string name="shortWednesday">СР</string>
+    <string name="shortThursday">ЧТ</string>
+    <string name="shortFriday">ПТ</string>
+    <string name="shortSaturday">СБ</string>
+
+    <integer name="com_vk_sdk_AppId">7985437</integer>
+
     <!-- HardCodedValues -->
     <string name="searchButtonText">Поиск</string>
     <string name="teacherText">Преподаватель</string>
@@ -24,4 +33,11 @@
     <string name="scheduleMenuText">Расписание</string>
     <string name="newsMenuText">Новости</string>
     <string name="ratingMenuText">Рейтинг</string>
+    <string name="takeOtherTeacher">Выбрать другого преподавателя</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="groupNumberHint">Номер группы</string>
+    <string name="underGroupText">Подгруппа</string>
+    <string name="groupText">Группа</string>
+    <string name="underGroupHint">1</string>
 </resources>

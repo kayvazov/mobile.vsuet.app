@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listDialogContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/spinner_background">
@@ -8,11 +10,14 @@
     <ListView
         android:id="@+id/listViewContainer"
         android:layout_width="300dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:isScrollContainer="false"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/teacherNameFilter" />
+        app:layout_constraintTop_toBottomOf="@+id/teacherNameFilter"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/teacherNameFilter"
@@ -23,12 +28,14 @@
         android:imeOptions="actionDone"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="Autofill" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
