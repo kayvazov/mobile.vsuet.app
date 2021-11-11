@@ -18,6 +18,7 @@ import com.example.vsuet.R
 import com.example.vsuet.databinding.ListDialogFragmentBinding
 import com.example.vsuet.listViewAdapter.ListViewAdapter
 import com.example.vsuet.roomDataBase.lessonDataBase.LessonDataBase
+import com.example.vsuet.roomDataBase.lessonDataBase.LessonPair
 import com.example.vsuet.teacherRecyclerView.TeacherRecyclerViewAdapter
 import java.util.*
 
@@ -67,9 +68,17 @@ class ListDialogFragment(
                 )
             val recyclerAdapter = TeacherRecyclerViewAdapter()
             teachersLessons.observeForever { list ->
-                val realList = list.toSet()
-                    .filter { it.numerator == numerator }
-                    .sortedBy { it.lessonTime.split("-")[0].split(".")[0] }
+                val listContainer = list.sortedBy { it.lessonTime.split("-")[0].split(".")[0].toInt() }
+                val realList = mutableListOf<LessonPair>()
+                for (item in listContainer ) {
+                    if (realList.size == 0) {
+                        realList.add(item)
+                    } else if (item.lessonTime != realList.last().lessonTime) {
+                        println(item.lessonTime)
+                        println(realList.last().lessonTime)
+                        realList.add(item)
+                    }
+                }
                 if (realList.isNotEmpty()) {
                     recyclerAdapter.data = realList
                     lessonsTable.adapter = recyclerAdapter

@@ -54,8 +54,10 @@ class TabLayoutFragment(private val day: String?, private val numerator: Int) : 
             binding.noLessonsText.text = "В этот день нет пар"
         }
         groupLessons.observeForever { list ->
+            println(list)
             recyclerAdapter.data =
                 list.filter { it.lessonDay == day && numerator == it.numerator }
+            println(recyclerAdapter.data)
             if (recyclerAdapter.data.isEmpty()) {
                 binding.noLessonsText.apply {
                     visibility = View.VISIBLE
