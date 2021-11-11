@@ -1,0 +1,4 @@
+1) pars_excel.ipynb - парсит все excel
+2) unmerging_excel.ipynb - переводит excel в читаемый вид
+3) all_in_one.ipynb - считывает все клетки всех листов и создаёт csv файл
+4) ? - как перевести csv файл без sqlite, я не знаю
