@@ -7,14 +7,15 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.vsuet.API.NewsPost
 import com.example.vsuet.R
 import com.example.vsuet.startMenuFragment.newsMenuFragment.NewsFragmentDirections
 import com.example.vsuet.startMenuFragment.newsMenuFragment.NewsItem
 
-class NewsRecyclerViewAdapter(val navController: NavController) : RecyclerView.Adapter<NewsViewHolder>() {
+class NewsRecyclerViewAdapter(private val navController: NavController) : RecyclerView.Adapter<NewsViewHolder>() {
 
 
-    var data = listOf<NewsItem>()
+    var data = listOf<NewsPost>()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
@@ -27,16 +28,16 @@ class NewsRecyclerViewAdapter(val navController: NavController) : RecyclerView.A
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = data[position]
-        val itemUri = item.previewImage.toUri().buildUpon().scheme("https").build()
-        holder.apply {
-            Glide.with(newsPreviewImage.context)
-                .load(itemUri)
-                .into(newsPreviewImage)
-            newsPreviewTitle.text = data[position].previewTitle
-            newsPreviewLinkContainer.text = data[position].insideLink
-            newsItemContainer.setOnClickListener {
-                navController.navigate(NewsFragmentDirections.toNewsItem(data[position].previewTitle, data[position].insideLink))
+        if(item.attachments.isNotEmpty() && item.attachments[0].photo.sizes.isNotEmpty()) {
+            val itemUri = item.attachments[0].photo.sizes[0].url
+            holder.apply {
+                Glide.with(newsPreviewImage.context)
+                    .load(itemUri)
+                    .into(newsPreviewImage)
             }
+        }
+        holder.apply {
+            newsText.text = item.text
         }
     }
 

@@ -160,6 +160,14 @@ class ListDialogFragment(
                     adapter.data = entries!!
                     teacherNameFilter.visibility = View.VISIBLE
                     teacherNameFilter.hint = SpannableStringBuilder("Номер группы")
+                    teacherNameFilter.addTextChangedListener {
+                        adapter.data = entries.filter {
+                            it.startsWith(
+                                teacherNameFilter.text.toString(),
+                                true
+                            )
+                        }
+                    }
                 }
 
                 else -> {

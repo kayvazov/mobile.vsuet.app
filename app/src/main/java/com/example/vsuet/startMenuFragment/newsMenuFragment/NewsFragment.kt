@@ -29,11 +29,13 @@ class NewsFragment : Fragment() {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-        viewModel.itemsList.observeForever{ list ->
+        viewModel.getVkontakteNews()
+        viewModel._response.observeForever{ list ->
             newsAdapter.data = list
             binding.newsList.visibility = View.VISIBLE
             binding.newsLoading.visibility = View.GONE
         }
+
         return binding.root
     }
 

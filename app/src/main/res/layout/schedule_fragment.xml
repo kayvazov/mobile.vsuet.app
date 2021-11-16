@@ -8,14 +8,18 @@
 
 
     <androidx.viewpager2.widget.ViewPager2
-        android:overScrollMode="never"
         android:id="@+id/daysPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/daysTabLayout" />
+        app:layout_constraintTop_toTopOf="@+id/daysTabLayout"
+        app:layout_constraintVertical_bias="1.0">
+
+    </androidx.viewpager2.widget.ViewPager2>
 
     <com.google.android.material.tabs.TabLayout
         android:overScrollMode="never"

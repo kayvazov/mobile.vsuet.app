@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vsuet.R
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonPair
+import com.example.vsuet.API.LessonProperty
 
 
 class LessonsRecyclerViewAdapter(
 ) : RecyclerView.Adapter<LessonViewHolder>() {
 
-    var data = listOf<LessonPair>()
+    var data = listOf<LessonProperty>()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
@@ -26,14 +26,15 @@ class LessonsRecyclerViewAdapter(
         return LessonViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: LessonViewHolder, position: Int) {
         val item = data[position]
 
         holder.apply {
-            lessonClass.text = item.lessonClass + " ауд."
-            lessonName.text = item.lessonName
-            lessonTeacher.text = item.lessonTeacher
-            lessonTime.text = item.lessonTime
+            lessonClass.text = item.audience
+            lessonName.text = item.name
+            lessonTeacher.text = item.teacher
+            lessonTime.text = item.time.start + " - " + item.time.end
         }
     }
 }

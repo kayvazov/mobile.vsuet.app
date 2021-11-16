@@ -68,7 +68,6 @@ class SearchFragment :
             fun checkPair() {
                 val teacherName: String = otherTeacherButton.text.toString()
                 var pairTime = ""
-                println(teacherName)
                 val teachersLessons =
                     viewModel.getTeachersLessons(
                         teacherName,
@@ -76,26 +75,22 @@ class SearchFragment :
                     )
                 val recyclerAdapter = TeacherRecyclerViewAdapter()
                 teachersLessons.observeForever { list ->
-                    val listContainer = list.sortedBy { it.lessonTime.split("-")[0].split(".")[0].toInt() }
+                    val listContainer =
+                        list.sortedBy { it.lessonTime.split("-")[0].split(".")[0].toInt() }
                     val realList = mutableListOf<LessonPair>()
-                    for (item in listContainer ) {
+                    for (item in listContainer) {
                         if (realList.size == 0) {
                             realList.add(item)
                         } else if (item.lessonTime != realList.last().lessonTime) {
-                            println(item.lessonTime)
-                            println(realList.last().lessonTime)
                             realList.add(item)
                         }
                     }
-                    realList.toSet().filter { it.numerator == numerator }
-
-                    if (realList.isNotEmpty()) {
-                        if (realList.isNotEmpty()) {
-                            recyclerAdapter.data = realList
-                            lessonTable.adapter = recyclerAdapter
-                            tableContainer.visibility = View.VISIBLE
-                            lessonTable.layoutManager = LinearLayoutManager(requireContext())
-                        }
+                    if (realList.any { it.numerator == numerator }) {
+                        recyclerAdapter.data = realList.filter { it.numerator == numerator }
+                        println(recyclerAdapter.data)
+                        lessonTable.adapter = recyclerAdapter
+                        tableContainer.visibility = View.VISIBLE
+                        lessonTable.layoutManager = LinearLayoutManager(requireContext())
                     } else {
                         tableContainer.visibility = View.GONE
                     }

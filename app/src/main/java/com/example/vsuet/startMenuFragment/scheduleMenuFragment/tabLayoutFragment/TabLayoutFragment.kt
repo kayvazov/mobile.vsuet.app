@@ -8,12 +8,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.vsuet.API.LessonProperty
 import com.example.vsuet.databinding.TabLayoutFragmentBinding
 import com.example.vsuet.lessonRecyclerView.LessonsRecyclerViewAdapter
 import com.example.vsuet.roomDataBase.lessonDataBase.LessonDataBase
 import java.util.*
 
-class TabLayoutFragment(private val day: String?, private val numerator: Int) : Fragment() {
+class TabLayoutFragment(
+    private val day: String?,
+    private val numerator: Boolean,
+    private val data: List<LessonProperty>
+) : Fragment() {
 
     private lateinit var viewModel: TabLayoutViewModel
     private lateinit var viewModelFactory: TabLayoutViewModelFactory
@@ -35,38 +40,32 @@ class TabLayoutFragment(private val day: String?, private val numerator: Int) : 
         val recyclerAdapter = LessonsRecyclerViewAdapter()
 
         val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-            Calendar.TUESDAY -> "Вторник"
-            Calendar.WEDNESDAY -> "Среда"
-            Calendar.THURSDAY -> "Четверг"
-            Calendar.FRIDAY -> "Пятница"
-            Calendar.SATURDAY -> "Суббота"
-            Calendar.SUNDAY -> "Воскресенье"
-            else -> "Понедельник"
+            Calendar.TUESDAY -> "вторник"
+            Calendar.WEDNESDAY -> "среда"
+            Calendar.THURSDAY -> "четверг"
+            Calendar.FRIDAY -> "пятница"
+            Calendar.SATURDAY -> "суббота"
+            Calendar.SUNDAY -> "воскресенье"
+            else -> "понедельник"
         }
+        println(Calendar.getInstance().time)
         val personalAccountSettings =
             requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE)
-        val groupName = personalAccountSettings.getString("groupNumber", "LOL")!!
+        val groupName = personalAccountSettings.getString("groupNumber", "Не указана группа")!!
         val podGroup = personalAccountSettings.getString("underGroupNumber", "1")!!
-        val groupLessons = viewModel.setGroupLessons(groupName, podGroup.toInt())
-        if (day == dayOfWeek.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }) {
-            binding.noLessonsText.text = "Сегодня нет пар"
-        } else {
-            binding.noLessonsText.text = "В этот день нет пар"
-        }
-        groupLessons.observeForever { list ->
-            println(list)
+
+        if (groupName != "Не указана группа") {
             recyclerAdapter.data =
-                list.filter { it.lessonDay == day && numerator == it.numerator }
-            println(recyclerAdapter.data)
-            if (recyclerAdapter.data.isEmpty()) {
-                binding.noLessonsText.apply {
-                    visibility = View.VISIBLE
-                    alpha = 0f
-                    animate().alpha(1.0f).duration = 500
-                }
-                binding.lessonsList.visibility = View.GONE
+                data.filter { it.day == day && it.weekType == numerator && it.subgroup == podGroup.toInt() }
+        } else {
+            binding.noGroupText.apply {
+                visibility = View.VISIBLE
+                alpha = 0f
+                animate().alpha(1.0f).duration = 500
             }
+
         }
+
 
 
 
