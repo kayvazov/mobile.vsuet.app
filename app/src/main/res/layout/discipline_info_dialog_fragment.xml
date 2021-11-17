@@ -9,33 +9,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/department"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/updatedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/hoursCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/semester"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#000000" />
 </LinearLayout>
