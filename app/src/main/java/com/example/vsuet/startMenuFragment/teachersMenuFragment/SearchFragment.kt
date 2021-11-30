@@ -12,6 +12,7 @@ import com.example.vsuet.databinding.SearchFragmentBinding
 import com.example.vsuet.listDialogFragment.ListDialogFragment
 import com.example.vsuet.roomDataBase.lessonDataBase.LessonDataBase
 import com.example.vsuet.roomDataBase.lessonDataBase.LessonPair
+import com.example.vsuet.roomDataBase.repository.RepositoryDataBase
 import com.example.vsuet.teacherRecyclerView.TeacherRecyclerViewAdapter
 import java.util.*
 
@@ -32,11 +33,11 @@ class SearchFragment :
         val names = args.teacherNames.split(",").toMutableList()
         binding.apply {
             otherTeacherButton.text = names[0]
-            val lessonDataBase = LessonDataBase.getInstance(requireActivity().applicationContext)
-            val lessonDataSource = lessonDataBase.lessonDataBaseDao
             val application = requireNotNull(this@SearchFragment.activity).application
+            val repository = RepositoryDataBase.getInstance(application)
+            val repositoryDataSource = repository.repositoryDao
             viewModelFactory =
-                SearchFragmentFactory(lessonDataSource, application)
+                SearchFragmentFactory(repositoryDataSource, application)
             viewModel =
                 ViewModelProvider(
                     this@SearchFragment,
@@ -59,35 +60,26 @@ class SearchFragment :
                 if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1) {
                     numeratorSwitch.text = "Числитель"
                     numeratorSwitch.isChecked = false
-                    0
+                    true
                 } else {
                     numeratorSwitch.text = "Знаменатель"
                     numeratorSwitch.isChecked = true
-                    1
+                    false
                 }
 
             fun checkPair() {
-                val teacherName: String = otherTeacherButton.text.toString()
+                viewModel.getTeachers(otherTeacherButton.text.toString())
                 var pairTime = ""
-                val teachersLessons =
-                    viewModel.getTeachersLessons(
-                        teacherName,
-                        otherDayButton.text.toString()
-                    )
                 val recyclerAdapter = TeacherRecyclerViewAdapter()
-                teachersLessons.observeForever { list ->
-                    val listContainer =
-                        list.sortedBy { it.lessonTime.split("-")[0].split(".")[0].toInt() }
-                    val realList = mutableListOf<LessonPair>()
-                    for (item in listContainer) {
-                        if (realList.size == 0) {
-                            realList.add(item)
-                        } else if (item.lessonTime != realList.last().lessonTime) {
-                            realList.add(item)
-                        }
-                    }
-                    if (realList.any { it.numerator == numerator }) {
-                        recyclerAdapter.data = realList.filter { it.numerator == numerator }
+                viewModel.teacherLessons.observe(viewLifecycleOwner) { list ->
+                    println(list)
+                    println(dayContainer.text.toString()
+                        .lowercase(Locale.getDefault()))
+                    if (list.any { it.weekType == numerator && it.day == otherDayButton.text.toString()
+                            .lowercase(Locale.getDefault()) }) {
+                        println(list)
+                        recyclerAdapter.data = list.filter { it.weekType == numerator && it.day == otherDayButton.text.toString()
+                            .lowercase(Locale.getDefault()) }.toSet().toList()
                         lessonTable.adapter = recyclerAdapter
                         tableContainer.visibility = View.VISIBLE
                         lessonTable.layoutManager = LinearLayoutManager(requireContext())
@@ -96,21 +88,17 @@ class SearchFragment :
                     }
 
 
-                    if (dayContainer.text.toString() == "Воскресенье" || (realList.filter{it.numerator == numerator}).isEmpty()) pairTime =
+                    if (dayContainer.text.toString() == "Воскресенье" || (list.filter{it.weekType == numerator}).isEmpty()) pairTime =
                         "Выходной"
                     apply {
-                        val checkNum: Int =
-                            if ((Calendar.getInstance()
+                        val checkNum: Boolean =
+                            (Calendar.getInstance()
                                     .get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1)
-                            ) {
-                                0
-                            } else {
-                                1
-                            }
                         responseMessage.text = when (pairTime) {
                             "Выходной" -> {
                                 responseMessage.visibility = View.VISIBLE
-                                if (numerator == checkNum && dayOfWeek == otherDayButton.text.toString()) {
+                                if (numerator == checkNum && dayOfWeek == otherDayButton.text.toString()
+                                        .lowercase(Locale.getDefault())) {
                                     "Сегодня у преподавателя нет пар"
                                 } else {
                                     "В этот день у преподавателя нет пар"
@@ -145,12 +133,12 @@ class SearchFragment :
                     dialog.show(requireActivity().supportFragmentManager, "OtherTeacherChoice")
                 }
                 numeratorSwitch.setOnClickListener {
-                    if (numerator == 0) {
-                        numerator = 1
+                    if (numerator) {
+                        numerator = false
                         checkPair()
                         numeratorSwitch.text = "Знаменатель"
                     } else {
-                        numerator = 0
+                        numerator = true
                         checkPair()
                         numeratorSwitch.text = "Числитель"
                     }

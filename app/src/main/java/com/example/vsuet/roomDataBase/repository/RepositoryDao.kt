@@ -4,10 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.vsuet.API.Group
-import com.example.vsuet.API.LessonProperty
-import com.example.vsuet.API.NewsPost
-import com.example.vsuet.API.RatingItem
+import com.example.vsuet.API.*
 
 @Dao
 interface RepositoryDao {
@@ -24,6 +21,9 @@ interface RepositoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertGroups(data: List<Group>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTeachers(data: TeacherProperty)
+
     @Query("SELECT * FROM lessonProperty")
     fun getSchedule() : List<LessonProperty>
 
@@ -35,5 +35,9 @@ interface RepositoryDao {
 
     @Query("SELECT * FROM `group`")
     fun getGroups() : List<Group>
+
+    @Query("SELECT * FROM teacherproperty")
+    fun getTeachers() : TeacherProperty
+
 
 }

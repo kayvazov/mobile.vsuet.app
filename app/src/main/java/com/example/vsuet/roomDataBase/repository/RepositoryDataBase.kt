@@ -5,14 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.vsuet.API.Group
-import com.example.vsuet.API.LessonProperty
-import com.example.vsuet.API.NewsPost
-import com.example.vsuet.API.RatingItem
+import com.example.vsuet.API.*
 import com.example.vsuet.TypeConverters.Converters
 
 
-@Database(entities = [LessonProperty::class, RatingItem::class, NewsPost::class, Group::class], version = 4)
+@Database(entities = [LessonProperty::class, RatingItem::class, NewsPost::class, Group::class, TeacherProperty::class], version = 5)
 @TypeConverters(Converters::class)
 abstract class RepositoryDataBase() : RoomDatabase() {
     abstract val repositoryDao: RepositoryDao

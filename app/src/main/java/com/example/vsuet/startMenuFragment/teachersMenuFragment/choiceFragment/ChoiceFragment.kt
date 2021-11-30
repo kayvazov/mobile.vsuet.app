@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.vsuet.databinding.ChoiceFragmentBinding
+import com.example.vsuet.roomDataBase.repository.RepositoryDataBase
 import com.example.vsuet.roomDataBase.teacherDataBase.TeacherDataBase
 
 class ChoiceFragment : Fragment() {
@@ -18,7 +19,6 @@ class ChoiceFragment : Fragment() {
     private lateinit var binding: ChoiceFragmentBinding
     private lateinit var viewModel: ChoiceViewModel
     private lateinit var viewModelFactory: ChoiceViewModelFactory
-    private lateinit var teacherNames: MutableList<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,24 +27,12 @@ class ChoiceFragment : Fragment() {
 
 
         binding = ChoiceFragmentBinding.inflate(inflater)
-        val teacherDataBase = TeacherDataBase.getInstance(requireActivity().applicationContext)
-        val teacherDataSource = teacherDataBase.teacherDataBaseDao
         val application = requireNotNull(activity).application
-        viewModelFactory = ChoiceViewModelFactory(teacherDataSource, application)
+        val repository = RepositoryDataBase.getInstance(application)
+        val repositoryDataSource = repository.repositoryDao
+        viewModelFactory = ChoiceViewModelFactory(repositoryDataSource, application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChoiceViewModel::class.java)
         binding.apply {
-            teacherSearchButton.setOnClickListener {
-                var names = ""
-                for (name in teacherNames) {
-                    names += "$name,"
-                }
-                findNavController().navigate(
-                    ChoiceFragmentDirections.fromChoiceToSearchResult(
-                        names
-                    )
-                )
-            }
-
             audienceSearchButton.setOnClickListener {
                 try {
                     startActivity(Intent(
@@ -62,11 +50,18 @@ class ChoiceFragment : Fragment() {
 
             }
 
-
-            val teacherData = viewModel.getTeachers()
-            teacherData.observeForever { list ->
-                if (list.isNotEmpty()) {
-                    teacherNames = list.map { it.teacherName }.toSet().toMutableList()
+            viewModel.getTeachers()
+            viewModel.teachers.observe(viewLifecycleOwner){ list ->
+                teacherSearchButton.setOnClickListener {
+                    var names = ""
+                    for (name in list.data) {
+                        names += "$name,"
+                    }
+                    findNavController().navigate(
+                        ChoiceFragmentDirections.fromChoiceToSearchResult(
+                            names
+                        )
+                    )
                 }
             }
         }

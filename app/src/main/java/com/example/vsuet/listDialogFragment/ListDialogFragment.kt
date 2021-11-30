@@ -12,28 +12,27 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vsuet.R
 import com.example.vsuet.databinding.ListDialogFragmentBinding
 import com.example.vsuet.listViewAdapter.ListViewAdapter
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonDataBase
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonPair
+import com.example.vsuet.roomDataBase.repository.RepositoryDataBase
+import com.example.vsuet.startMenuFragment.teachersMenuFragment.SearchFragmentFactory
+import com.example.vsuet.startMenuFragment.teachersMenuFragment.SearchFragmentViewModel
 import com.example.vsuet.teacherRecyclerView.TeacherRecyclerViewAdapter
 import java.util.*
 
 class ListDialogFragment(
     private val type: String,
-    private val argNumerator: Int?,
+    private val argNumerator: Boolean?,
     private val entries: MutableList<String>?,
     private val toChange: Boolean
 ) :
     DialogFragment() {
 
     private lateinit var binding: ListDialogFragmentBinding
-    private lateinit var viewModelFactory: ListViewModelFactory
-    private lateinit var viewModel: ListDialogViewModel
-
+    private lateinit var viewModelFactory: SearchFragmentFactory
+    private lateinit var viewModel: SearchFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,55 +47,40 @@ class ListDialogFragment(
         val teacherChanger = requireActivity().findViewById<Button>(R.id.otherTeacherButton)
         val dayContainer = requireActivity().findViewById<Button>(R.id.otherDayButton)
 
-        fun checkPair(numerator: Int, teacherName: String) {
+        fun checkPair(numerator: Boolean, teacherName: String) {
 
             val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                Calendar.TUESDAY -> "Вторник"
-                Calendar.WEDNESDAY -> "Среда"
-                Calendar.THURSDAY -> "Четверг"
-                Calendar.FRIDAY -> "Пятница"
-                Calendar.SATURDAY -> "Суббота"
-                Calendar.SUNDAY -> "Воскресенье"
-                else -> "Понедельник"
+                Calendar.TUESDAY -> "вторник"
+                Calendar.WEDNESDAY -> "среда"
+                Calendar.THURSDAY -> "четверг"
+                Calendar.FRIDAY -> "пятница"
+                Calendar.SATURDAY -> "суббота"
+                Calendar.SUNDAY -> "воскресенье"
+                else -> "понедельник"
             }
             var pairTime = ""
-            val teachersLessons =
-                viewModel.getTeachersLesson(
-                    teacherName,
-                    dayContainer.text.toString()
-                )
             val recyclerAdapter = TeacherRecyclerViewAdapter()
-            teachersLessons.observeForever { list ->
-                val listContainer =
-                    list.sortedBy { it.lessonTime.split("-")[0].split(".")[0].toInt() }
-                val realList = mutableListOf<LessonPair>()
-                for (item in listContainer) {
-                    if (realList.size == 0) {
-                        realList.add(item)
-                    } else if (item.lessonTime != realList.last().lessonTime) {
-                        println(item.lessonTime)
-                        println(realList.last().lessonTime)
-                        realList.add(item)
-                    }
-                }
-                if (realList.isNotEmpty()) {
-                    recyclerAdapter.data = realList
+            viewModel.getTeachers(teacherName)
+            viewModel.teacherLessons.observeForever { list ->
+                if (list.any {
+                        it.day == dayContainer.text.toString()
+                            .lowercase(Locale.getDefault())
+                    }) {
+                    recyclerAdapter.data = list.filter {
+                        it.day == dayContainer.text.toString()
+                            .lowercase(Locale.getDefault()) && it.weekType == numerator
+                    }.toSet().toList()
                     lessonsTable.adapter = recyclerAdapter
                     tableContainer.visibility = View.VISIBLE
                     responseMessage.visibility = View.VISIBLE
-                    lessonsTable.layoutManager = LinearLayoutManager(requireContext())
                 } else {
                     tableContainer.visibility = View.GONE
                 }
-                if (dayContainer.text.toString() == "Воскресенье" || realList.isEmpty()) pairTime =
+                if (dayContainer.text.toString() == "Воскресенье" || list.isEmpty()) pairTime =
                     "Выходной"
                 apply {
-                    val checkNum: Int =
-                        if ((Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1)) {
-                            0
-                        } else {
-                            1
-                        }
+                    val checkNum: Boolean =
+                        (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1)
                     responseMessage.text = when (pairTime) {
                         "Выходной" -> {
                             responseMessage.visibility = View.VISIBLE
@@ -117,16 +101,16 @@ class ListDialogFragment(
 
         binding.apply {
             listViewContainer.adapter = adapter
-            val lessonDataBase = LessonDataBase.getInstance(requireActivity().applicationContext)
-            val lessonDataSource = lessonDataBase.lessonDataBaseDao
             val application = requireNotNull(activity).application
+            val repository = RepositoryDataBase.getInstance(application)
+            val repositoryDataSource = repository.repositoryDao
             dialog?.window?.attributes?.windowAnimations = R.style.dialog_anim
-            viewModelFactory = ListViewModelFactory(lessonDataSource, application)
+            viewModelFactory = SearchFragmentFactory(repositoryDataSource, application)
             viewModel =
                 ViewModelProvider(
                     this@ListDialogFragment,
                     viewModelFactory
-                ).get(ListDialogViewModel::class.java)
+                ).get(SearchFragmentViewModel::class.java)
             when (type) {
                 "OtherDay" -> {
                     adapter.data =
@@ -134,7 +118,6 @@ class ListDialogFragment(
                 }
                 "Teacher" -> {
                     adapter.data = entries!!
-                    println(adapter.data)
                     teacherNameFilter.visibility = View.VISIBLE
                     teacherNameFilter.post {
                         val itemHeight = teacherNameFilter.height
@@ -175,13 +158,11 @@ class ListDialogFragment(
             listViewContainer.setOnItemClickListener { _, _, position, _ ->
                 when (type) {
                     "Teacher" -> {
-                        if (toChange) {
-                            checkPair(
-                                argNumerator!!,
-                                adapter.data[position].toString()
-                            )
-                            teacherChanger.text = adapter.data[position].toString()
-                        }
+                        checkPair(
+                            argNumerator!!,
+                            adapter.data[position].toString()
+                        )
+                        teacherChanger.text = adapter.data[position].toString()
                     }
                     "Settings" -> {
                         requireActivity().findViewById<Button>(R.id.groupTextButton).text =
@@ -197,6 +178,7 @@ class ListDialogFragment(
                     else -> {
                         val day = adapter.data[position].toString()
                         dayContainer.text = day
+                        println(teacherChanger.text)
                         checkPair(argNumerator!!, teacherChanger.text.toString())
                     }
                 }

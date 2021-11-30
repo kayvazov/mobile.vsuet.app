@@ -4,12 +4,13 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vsuet.API.TeacherLesson
 import com.example.vsuet.R
 import com.example.vsuet.roomDataBase.lessonDataBase.LessonPair
 
 class TeacherRecyclerViewAdapter : RecyclerView.Adapter<TeacherViewHolder>() {
 
-    var data = listOf<LessonPair>()
+    var data = listOf<TeacherLesson>()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
@@ -24,9 +25,9 @@ class TeacherRecyclerViewAdapter : RecyclerView.Adapter<TeacherViewHolder>() {
     override fun onBindViewHolder(holder: TeacherViewHolder, position: Int) {
         val item = data[position]
         holder.apply {
-            lessonClass.text = item.lessonClass + " ауд."
-            lessonName.text = item.lessonName
-            lessonTime.text = item.lessonTime
+            lessonClass.text = item.audience
+            lessonName.text = item.name
+            lessonTime.text = item.time.start + "-" + item.time.end
         }
     }
 
