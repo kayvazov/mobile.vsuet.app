@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "587513334827",
+    "project_id": "vsuet-63840",
+    "storage_bucket": "vsuet-63840.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587513334827:android:27146165aa799ce3aaae6e",
+        "android_client_info": {
+          "package_name": "com.example.prepodsearch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587513334827-9bkfiihbi7a6390g3a9li1d8k4h9vkrf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo9ZSlYb4AfcjIkU5xzAcFvAymlZPO1qU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587513334827-9bkfiihbi7a6390g3a9li1d8k4h9vkrf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "2"
+}

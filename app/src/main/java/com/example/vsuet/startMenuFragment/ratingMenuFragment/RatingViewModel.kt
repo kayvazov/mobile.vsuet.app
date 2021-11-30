@@ -1,10 +1,14 @@
 package com.example.vsuet.startMenuFragment.ratingMenuFragment
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.vsuet.API.*
-import com.squareup.moshi.Json
+import com.example.vsuet.API.LessonProperty
+import com.example.vsuet.API.RatingApi
+import com.example.vsuet.API.RatingItem
+import com.example.vsuet.API.RatingProperty
+import com.example.vsuet.roomDataBase.repository.RepositoryDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -12,30 +16,47 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RatingViewModel : ViewModel() {
+class RatingViewModel(application: Application, private val repositoryDataSource: RepositoryDao) :
+    ViewModel() {
 
-    val _rating = MutableLiveData<List<RatingItem>>()
+    val rating = MutableLiveData<List<RatingItem>>()
 
     fun getRating(recordNumBook: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-               RatingApi.retrofitService.getProperties(recordNumBook).enqueue(
+                RatingApi.retrofitService.getProperties(recordNumBook).enqueue(
                     object : Callback<RatingProperty> {
                         override fun onResponse(
                             call: Call<RatingProperty>,
                             response: Response<RatingProperty>
                         ) {
-                            _rating.value = response.body()?.data?.rating
-                            println(_rating.value?.get(0))
+                            rating.value = response.body()?.data?.rating
+                            if(response.body()?.data?.rating != null) {
+                                insertData(response.body()?.data?.rating!!)
+                            }
                         }
-
                         override fun onFailure(call: Call<RatingProperty>, t: Throwable) {
-                            println("?!")
                             println(t.message)
+                            getData()
                         }
-
                     }
                 )
+            }
+        }
+    }
+
+    fun getData(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                rating.postValue(repositoryDataSource.getRating())
+            }
+        }
+    }
+
+    fun insertData(data: List<RatingItem>){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                repositoryDataSource.insertRating(data)
             }
         }
     }

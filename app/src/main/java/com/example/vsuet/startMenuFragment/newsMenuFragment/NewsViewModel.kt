@@ -1,11 +1,14 @@
 package com.example.vsuet.startMenuFragment.newsMenuFragment
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vsuet.API.NewsPost
 import com.example.vsuet.API.NewsProperty
+import com.example.vsuet.API.RatingItem
 import com.example.vsuet.API.VkontakteApi
+import com.example.vsuet.roomDataBase.repository.RepositoryDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -15,11 +18,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class NewsViewModel : ViewModel() {
+class NewsViewModel(application: Application, private val repositoryDataSource: RepositoryDao) : ViewModel() {
 
 
     val itemsList = MutableLiveData<List<NewsItem>>()
-    val _response = MutableLiveData<List<NewsPost>>()
+    val response = MutableLiveData<List<NewsPost>>()
 
     private suspend fun getRawVsuetNews() {
         val itemsContainer = mutableListOf<NewsItem>()
@@ -55,16 +58,34 @@ class NewsViewModel : ViewModel() {
                             call: Call<NewsProperty>,
                             response: Response<NewsProperty>
                         ) {
-                            _response.value = response.body()?.response?.items
+                            this@NewsViewModel.response.value = response.body()?.response?.items
+
+                            if(response.body()?.response?.items != null){
+                                insertData(response.body()?.response?.items!!)
+                            }
                         }
 
                         override fun onFailure(call: Call<NewsProperty>, t: Throwable) {
-                            println(t.message)
-                            println("?")
                         }
 
                     }
                 )
+            }
+        }
+    }
+
+    fun getData(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                response.postValue(repositoryDataSource.getNews())
+            }
+        }
+    }
+
+    fun insertData(data: List<NewsPost>){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                repositoryDataSource.insertNews(data)
             }
         }
     }

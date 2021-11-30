@@ -1,5 +1,8 @@
 package com.example.vsuet.API
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
 data class RatingProperty(
@@ -36,16 +39,22 @@ data class GroupItem(
     @field:Json(name = "__v") val __v: String
 )
 
+
+data class UpgradedRatingContainer(
+    val items: List<UpgradedRatingItem>
+)
+
+@Entity
 data class RatingItem(
-    @field:Json(name = "_id") val _id: String,
-    @field:Json(name = "value") val value: List<String>,
-    @field:Json(name = "upgradedRating") val upgradedRating: List<UpgradedRatingItem>,
-    @field:Json(name = "createdTime") val createdTime: String,
-    @field:Json(name = "student") val student: String,
-    @field:Json(name = "faculty") val faculty: String,
-    @field:Json(name = "group") val group: String,
-    @field:Json(name = "lesson") val lesson: RatingLesson,
-    @field:Json(name = "__v") val __v: String
+    @PrimaryKey @ColumnInfo(name = "_id") @field:Json(name = "_id") val _id: String,
+    @ColumnInfo(name = "value") @field:Json(name = "value") val value: List<String>,
+    @ColumnInfo(name = "upgradedRating") @field:Json(name = "upgradedRating") val upgradedRating: List<UpgradedRatingItem>,
+    @ColumnInfo(name = "createdTime") @field:Json(name = "createdTime") val createdTime: String,
+    @ColumnInfo(name = "student") @field:Json(name = "student") val student: String,
+    @ColumnInfo(name = "faculty") @field:Json(name = "faculty") val faculty: String,
+    @ColumnInfo(name = "group") @field:Json(name = "group") val group: String,
+    @ColumnInfo(name = "lesson") @field:Json(name = "lesson") val lesson: RatingLesson,
+    @ColumnInfo(name = "__v") @field:Json(name = "__v") val __v: String
 )
 
 data class RatingLesson(
@@ -82,8 +91,8 @@ data class HeaderChildrenItem(
 )
 
 data class UpgradedRatingItem(
-    @field:Json(name = "total") val total: DisciplineItem,
-    @field:Json(name = "items") val items: List<DisciplineInnerPoint>
+    @field:Json(name = "items") val items: List<DisciplineInnerPoint>,
+    @field:Json(name = "total") val total: DisciplineItem
 )
 
 

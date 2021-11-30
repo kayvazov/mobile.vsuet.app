@@ -28,8 +28,8 @@ class NewsRecyclerViewAdapter(private val navController: NavController) : Recycl
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = data[position]
-        if(item.attachments.isNotEmpty() && item.attachments[0].photo.sizes.isNotEmpty()) {
-            val itemUri = item.attachments[0].photo.sizes[0].url
+        if(item.attachments?.isNotEmpty() == true && item.attachments[0].photo.sizes.isNotEmpty()) {
+            val itemUri = item.attachments?.get(0)?.photo?.sizes?.get(0)?.url
             holder.apply {
                 Glide.with(newsPreviewImage.context)
                     .load(itemUri)

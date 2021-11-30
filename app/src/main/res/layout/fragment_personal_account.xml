@@ -202,4 +202,17 @@
         app:layout_constraintTop_toTopOf="@+id/guideline15"
         tools:ignore="TouchTargetSizeCheck" />
 
+    <TextView
+        android:id="@+id/noInternetText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Нет интернет-подключения"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

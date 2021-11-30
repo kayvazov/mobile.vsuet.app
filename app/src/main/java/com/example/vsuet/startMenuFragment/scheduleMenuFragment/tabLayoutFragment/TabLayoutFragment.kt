@@ -48,7 +48,6 @@ class TabLayoutFragment(
             Calendar.SUNDAY -> "воскресенье"
             else -> "понедельник"
         }
-        println(Calendar.getInstance().time)
         val personalAccountSettings =
             requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE)
         val groupName = personalAccountSettings.getString("groupNumber", "Не указана группа")!!
@@ -57,6 +56,9 @@ class TabLayoutFragment(
         if (groupName != "Не указана группа") {
             recyclerAdapter.data =
                 data.filter { it.day == day && it.weekType == numerator && it.subgroup == podGroup.toInt() }
+            if(recyclerAdapter.data.isEmpty()){
+                binding.noLessonsText.visibility = View.VISIBLE
+            }
         } else {
             binding.noGroupText.apply {
                 visibility = View.VISIBLE
@@ -65,6 +67,7 @@ class TabLayoutFragment(
             }
 
         }
+
 
 
 

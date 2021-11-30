@@ -47,7 +47,6 @@ class ListDialogFragment(
         val responseMessage = requireActivity().findViewById<TextView>(R.id.responseMessage)
         val teacherChanger = requireActivity().findViewById<Button>(R.id.otherTeacherButton)
         val dayContainer = requireActivity().findViewById<Button>(R.id.otherDayButton)
-        val teacherText = requireActivity().findViewById<Button>(R.id.teacherContainer)
 
         fun checkPair(numerator: Int, teacherName: String) {
 
@@ -68,9 +67,10 @@ class ListDialogFragment(
                 )
             val recyclerAdapter = TeacherRecyclerViewAdapter()
             teachersLessons.observeForever { list ->
-                val listContainer = list.sortedBy { it.lessonTime.split("-")[0].split(".")[0].toInt() }
+                val listContainer =
+                    list.sortedBy { it.lessonTime.split("-")[0].split(".")[0].toInt() }
                 val realList = mutableListOf<LessonPair>()
-                for (item in listContainer ) {
+                for (item in listContainer) {
                     if (realList.size == 0) {
                         realList.add(item)
                     } else if (item.lessonTime != realList.last().lessonTime) {
@@ -136,22 +136,20 @@ class ListDialogFragment(
                     adapter.data = entries!!
                     println(adapter.data)
                     teacherNameFilter.visibility = View.VISIBLE
-                    if(!toChange) {
-                        teacherNameFilter.post {
-                            val itemHeight = teacherNameFilter.height
-                            listViewContainer.setPadding(0, 0, 0, itemHeight)
-                            teacherNameFilter.addTextChangedListener {
-                                adapter.data = entries.filter {
-                                    it.startsWith(
-                                        teacherNameFilter.text.toString(),
-                                        true
-                                    )
-                                }
-                                if(adapter.count * itemHeight <= listDialogContainer.height){
-                                    listViewContainer.setPadding(0, 0, 0, 0)
-                                } else {
-                                    listViewContainer.setPadding(0, 0, 0, itemHeight)
-                                }
+                    teacherNameFilter.post {
+                        val itemHeight = teacherNameFilter.height
+                        listViewContainer.setPadding(0, 0, 0, itemHeight)
+                        teacherNameFilter.addTextChangedListener {
+                            adapter.data = entries.filter {
+                                it.startsWith(
+                                    teacherNameFilter.text.toString(),
+                                    true
+                                )
+                            }
+                            if (adapter.count * itemHeight <= listDialogContainer.height) {
+                                listViewContainer.setPadding(0, 0, 0, 0)
+                            } else {
+                                listViewContainer.setPadding(0, 0, 0, itemHeight)
                             }
                         }
                     }
@@ -183,8 +181,6 @@ class ListDialogFragment(
                                 adapter.data[position].toString()
                             )
                             teacherChanger.text = adapter.data[position].toString()
-                        } else {
-                            teacherText.text = adapter.data[position].toString()
                         }
                     }
                     "Settings" -> {
@@ -196,6 +192,7 @@ class ListDialogFragment(
                         ).edit()
                         settingsEditor.putString("groupNumber", adapter.data[position].toString())
                             .apply()
+                        settingsEditor.putBoolean("isGroupChanged", true).apply()
                     }
                     else -> {
                         val day = adapter.data[position].toString()

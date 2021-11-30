@@ -1,5 +1,8 @@
 package com.example.vsuet.API
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
 data class ScheduleProperty(
@@ -7,20 +10,24 @@ data class ScheduleProperty(
     @field:Json(name = "data") val data: FullLessonsData
 )
 
-data class FullLessonsData(@field:Json(name = "lessons") val lessons: List<LessonProperty>, @field:Json(name = "updatedTime") val updatedTime: String)
-data class GroupLessons(@field:Json(name = "lessons") val lessons: List<LessonProperty>)
+data class FullLessonsData(
+    @field:Json(name = "lessons") val lessons: List<LessonProperty>,
+    @field:Json(name = "updatedTime") val updatedTime: String
+)
+
+@Entity
 data class LessonProperty(
-    @field:Json(name = "time") val time: LessonTime,
-    @field:Json(name = "_id") val _id: String,
-    @field:Json(name = "name") val name: String,
-    @field:Json(name = "type") val type: String,
-    @field:Json(name = "teacher") val teacher: String,
-    @field:Json(name = "audience") val audience: String,
-    @field:Json(name = "day") val day: String,
-    @field:Json(name = "group") val group: String,
-    @field:Json(name = "subgroup") val subgroup: Int,
-    @field:Json(name = "weekType") val weekType: Boolean,
-    @field:Json(name = "__v") val __v: Int
+    @PrimaryKey @ColumnInfo(name = "_id") @field:Json(name = "_id") val _id: String,
+    @ColumnInfo(name = "time") @field:Json(name = "time") val time: LessonTime,
+    @ColumnInfo(name = "name") @field:Json(name = "name") val name: String,
+    @ColumnInfo(name = "type") @field:Json(name = "type") val type: String,
+    @ColumnInfo(name = "teacher") @field:Json(name = "teacher") val teacher: String,
+    @ColumnInfo(name = "audience") @field:Json(name = "audience") val audience: String,
+    @ColumnInfo(name = "day") @field:Json(name = "day") val day: String,
+    @ColumnInfo(name = "group") @field:Json(name = "group") val group: String,
+    @ColumnInfo(name = "subgroup") @field:Json(name = "subgroup") val subgroup: Int,
+    @ColumnInfo(name = "weekType") @field:Json(name = "weekType") val weekType: Boolean,
+    @ColumnInfo(name = "__v") @field:Json(name = "__v") val __v: Int
 )
 
 data class LessonTime(
@@ -28,46 +35,3 @@ data class LessonTime(
     @field:Json(name = "end") val end: String
 )
 
-data class UpdatedTime(
-    @field:Json(name = "updatedTime") val updatedTime: String
-)
-
-data class Id(
-    @field:Json(name = "_id") val _id: String
-)
-
-data class Name(
-    @field:Json(name = "name") val name: String
-)
-
-data class Type(
-    @field:Json(name = "type") val type: String
-)
-
-data class Teacher(
-    @field:Json(name = "teacher") val teacher: String
-)
-
-data class Audience(
-    @field:Json(name = "audience") val audience: String
-)
-
-data class Day(
-    @field:Json(name = "day") val day: String
-)
-
-data class Group(
-    @field:Json(name = "group") val group: String
-)
-
-data class Subgroup(
-    @field:Json(name = "subgroup") val subgroup: String
-)
-
-data class WeekType(
-    @field:Json(name = "weekType") val weekType: Boolean
-)
-
-data class Unknown(
-    @field:Json(name = "__v") val __v: Int
-)

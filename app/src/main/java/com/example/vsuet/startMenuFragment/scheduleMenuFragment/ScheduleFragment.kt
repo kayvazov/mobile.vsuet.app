@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.vsuet.databinding.ScheduleFragmentBinding
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonDataBase
+import com.example.vsuet.roomDataBase.repository.RepositoryDataBase
 import com.example.vsuet.viewPagerAdapter.DaysViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.*
@@ -34,13 +34,13 @@ class ScheduleFragment : Fragment() {
                 false
             }
 
-        val days = listOf("ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ")
+        val days = listOf("ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС")
 
         val application = requireNotNull(this.activity).application
-        val lessonsDataBase = LessonDataBase.getInstance(requireContext())
-        val lessonsDataSource = lessonsDataBase.lessonDataBaseDao
+        val repository = RepositoryDataBase.getInstance(application)
+        val repositoryDataSource = repository.repositoryDao
 
-        viewModelFactory = ScheduleViewModelFactory(application, lessonsDataSource)
+        viewModelFactory = ScheduleViewModelFactory(application, repositoryDataSource)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ScheduleViewModel::class.java)
 
 
@@ -48,16 +48,24 @@ class ScheduleFragment : Fragment() {
             requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE)
         val groupName = personalAccountSettings.getString("groupNumber", "Не указана группа")!!
         val updatedTime = personalAccountSettings.getString("updatedTime", "")!!
-        viewModel.getSchedule(groupName, updatedTime)
-
-        viewModel.updatedTime.observeForever {
-            personalAccountSettings.edit().putString("updatedTime", it).apply()
+        val isNewGroup = personalAccountSettings.getBoolean("isGroupChanged", false)
+        println(isNewGroup)
+        if (isNewGroup) {
+            viewModel.getSchedule(groupName, "", isNewGroup)
+            personalAccountSettings.edit().putBoolean("isGroupChanged", false).apply()
+        } else {
+            viewModel.getSchedule(groupName, updatedTime, isNewGroup)
         }
-        viewModel._schedule.observeForever { list ->
-            if (list.isEmpty()) {
-                viewModel.getSchedule(groupName, "")
+
+
+        viewModel.schedule.observe(viewLifecycleOwner) { list ->
+            viewModel.updatedTime.observe(viewLifecycleOwner) {
+                personalAccountSettings.edit().putString("updatedTime", it).apply()
             }
+
             binding.apply {
+                progressBar2.visibility = View.GONE
+                daysTabLayout.visibility = View.VISIBLE
 
                 scheduleNumeratorButton.setOnClickListener {
                     val currentItem = daysPager.currentItem
@@ -94,8 +102,14 @@ class ScheduleFragment : Fragment() {
                 TabLayoutMediator(daysTabLayout, daysPager) { tab, position ->
                     tab.text = days[position]
                 }.attach()
+
+                val day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+                binding.daysPager.setCurrentItem(day - 2, false)
+
             }
         }
+
+
         return binding.root
     }
 }

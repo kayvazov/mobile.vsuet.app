@@ -17,7 +17,7 @@ class DaysViewPagerAdapter(
 
 
     override fun getItemCount(): Int {
-        return 6
+        return 7
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -28,6 +28,7 @@ class DaysViewPagerAdapter(
                 3 -> "четверг"
                 4 -> "пятница"
                 5 -> "суббота"
+                6 -> "воскресенье"
                 else -> "понедельник"
             },
             numerator,

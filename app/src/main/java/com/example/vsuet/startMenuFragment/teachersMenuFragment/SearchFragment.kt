@@ -29,8 +29,9 @@ class SearchFragment :
         savedInstanceState: Bundle?
     ): View {
         binding = SearchFragmentBinding.inflate(inflater)
+        val names = args.teacherNames.split(",").toMutableList()
         binding.apply {
-            otherTeacherButton.text = args.teacherName
+            otherTeacherButton.text = names[0]
             val lessonDataBase = LessonDataBase.getInstance(requireActivity().applicationContext)
             val lessonDataSource = lessonDataBase.lessonDataBaseDao
             val application = requireNotNull(this@SearchFragment.activity).application
@@ -87,7 +88,6 @@ class SearchFragment :
                     }
                     if (realList.any { it.numerator == numerator }) {
                         recyclerAdapter.data = realList.filter { it.numerator == numerator }
-                        println(recyclerAdapter.data)
                         lessonTable.adapter = recyclerAdapter
                         tableContainer.visibility = View.VISIBLE
                         lessonTable.layoutManager = LinearLayoutManager(requireContext())
@@ -95,7 +95,8 @@ class SearchFragment :
                         tableContainer.visibility = View.GONE
                     }
 
-                    if (dayContainer.text.toString() == "Воскресенье" || realList.isEmpty()) pairTime =
+
+                    if (dayContainer.text.toString() == "Воскресенье" || (realList.filter{it.numerator == numerator}).isEmpty()) pairTime =
                         "Выходной"
                     apply {
                         val checkNum: Int =
@@ -135,7 +136,6 @@ class SearchFragment :
                     }
                 }
                 otherTeacherButton.setOnClickListener {
-                    val names = args.teacherNames.split(",").toMutableList()
                     val dialog = ListDialogFragment(
                         "Teacher",
                         numerator,
@@ -158,6 +158,7 @@ class SearchFragment :
             }
 
             checkPair()
+
             return root
         }
     }

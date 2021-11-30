@@ -11,9 +11,6 @@
         android:label="fragment_search_dialog"
         tools:layout="@layout/search_fragment">
         <argument
-            android:name="teacherName"
-            app:argType="string" />
-        <argument
             android:name="teacherNames"
             app:argType="string" />
     </fragment>
@@ -96,7 +93,7 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
-            app:popUpTo="@id/startMenuFragment" />
+            app:popUpTo="@id/choiceFragment" />
     </fragment>
     <fragment
         android:id="@+id/personalAccountFragment"

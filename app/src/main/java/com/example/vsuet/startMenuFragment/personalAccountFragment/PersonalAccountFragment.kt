@@ -2,16 +2,21 @@ package com.example.vsuet.startMenuFragment.personalAccountFragment
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.vsuet.R
 import com.example.vsuet.databinding.FragmentPersonalAccountBinding
 import com.example.vsuet.listDialogFragment.ListDialogFragment
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonDataBase
+import com.example.vsuet.roomDataBase.repository.RepositoryDataBase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PersonalAccountFragment : Fragment() {
@@ -31,36 +36,68 @@ class PersonalAccountFragment : Fragment() {
                 .edit()
 
         val application = requireNotNull(this.activity).application
-        val lessonDataBase = LessonDataBase.getInstance(requireContext())
-        val lessonDataSource = lessonDataBase.lessonDataBaseDao
-        viewModelFactory = PersonalAccountViewModelFactory(application, lessonDataSource)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(PersonalAccountViewModel::class.java)
+        val repository = RepositoryDataBase.getInstance(application)
+        val repositoryDataSource = repository.repositoryDao
+        viewModelFactory = PersonalAccountViewModelFactory(application, repositoryDataSource)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(PersonalAccountViewModel::class.java)
 
         binding.apply {
+            viewModel.internetConnection.observe(viewLifecycleOwner) {
+                if (!it) {
+                    groupText.visibility = View.GONE
+                    groupTextButton.visibility = View.GONE
+                    underGroupButton.visibility = View.GONE
+                    underGroupText.visibility = View.GONE
+                    personalScorerContainer.visibility = View.GONE
+                    personalScorerText.visibility = View.GONE
+                    noInternetText.visibility = View.VISIBLE
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        viewModel.getGroups()
+                    }, 5000)
+                } else {
+                    groupText.visibility = View.VISIBLE
+                    groupTextButton.visibility = View.VISIBLE
+                    underGroupButton.visibility = View.VISIBLE
+                    underGroupText.visibility = View.VISIBLE
+                    personalScorerContainer.visibility = View.VISIBLE
+                    personalScorerText.visibility = View.VISIBLE
+                    noInternetText.visibility = View.GONE
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        viewModel.getGroups()
+                    }, 5000)
+                }
+            }
 
-            groupTextButton.text = requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE).getString("groupNumber", "Номер группы")
-            underGroupButton.text = requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE).getString("underGroupNumber", "1")
+            groupTextButton.text =
+                requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE)
+                    .getString("groupNumber", "Номер группы")
+            underGroupButton.text =
+                requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE)
+                    .getString("underGroupNumber", "1")
+            personalScorerContainer.text = SpannableStringBuilder(
+                requireActivity().getSharedPreferences(
+                    "accountSettings",
+                    Context.MODE_PRIVATE
+                ).getString("personalScorerNumber", "")
+            )
 
             requireActivity().findViewById<FloatingActionButton>(R.id.personalAccountButton).apply {
                 animate().alpha(0f).duration = 500
             }
 
-            val lessons = viewModel.getGroups()
-            val groups = mutableListOf<String>()
-            lessons.observeForever{ list ->
-                for(item in list){
-                    if(!groups.contains(item.groupName)) {
-                        groups.add(item.groupName)
-                    }
-                }
+            viewModel.getGroups()
+            viewModel.groups.observeForever { list ->
+                val groupNames = list.map { it.name }.toMutableList()
                 groupTextButton.setOnClickListener {
-                    val dialog = ListDialogFragment("Settings", null, groups, true)
+                    val dialog = ListDialogFragment("Settings", null, groupNames, true)
                     dialog.show(requireActivity().supportFragmentManager, "settingsChanger")
                 }
 
             }
 
             underGroupButton.setOnClickListener {
+                settingsEditor.putBoolean("isGroupChanged", true).apply()
                 val thisText = underGroupButton.text
                 underGroupButton.text = when (thisText) {
                     "2" -> {
@@ -84,6 +121,28 @@ class PersonalAccountFragment : Fragment() {
                     "personalScorerNumber",
                     personalScorerContainer.text.toString()
                 ).apply()
+            }
+
+            viewModel.group.observe(viewLifecycleOwner) { value ->
+                if (value == "Invalid") {
+                    Toast.makeText(
+                        requireContext(),
+                        "Неправильно введён номер зачётки",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    if (groupTextButton.text.toString() != "Номер группы") {
+                        settingsEditor.putString("groupNumber", value)
+                        groupTextButton.text = value
+                    }
+                }
+            }
+
+            personalScorerContainer.doAfterTextChanged { text ->
+                if (text.toString().length == 6) {
+                    viewModel.validateStudent(text.toString())
+
+                }
             }
 
             return root
