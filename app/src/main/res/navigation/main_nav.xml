@@ -76,7 +76,12 @@
         android:id="@+id/ratingFragment"
         android:name="com.example.vsuet.startMenuFragment.ratingMenuFragment.RatingFragment"
         android:label="rating_fragment"
-        tools:layout="@layout/rating_fragment" />
+        tools:layout="@layout/rating_fragment" >
+        <argument
+            android:name="toSearch"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
     <fragment
         android:id="@+id/scheduleFragment"
         android:name="com.example.vsuet.startMenuFragment.scheduleMenuFragment.ScheduleFragment"
@@ -94,6 +99,9 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/choiceFragment" />
+        <action
+            android:id="@+id/toSearchRating"
+            app:destination="@id/ratingFragment" />
     </fragment>
     <fragment
         android:id="@+id/personalAccountFragment"

@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.vsuet.databinding.ChoiceFragmentBinding
 import com.example.vsuet.roomDataBase.repository.RepositoryDataBase
-import com.example.vsuet.roomDataBase.teacherDataBase.TeacherDataBase
 
 class ChoiceFragment : Fragment() {
 
@@ -32,13 +31,20 @@ class ChoiceFragment : Fragment() {
         val repositoryDataSource = repository.repositoryDao
         viewModelFactory = ChoiceViewModelFactory(repositoryDataSource, application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChoiceViewModel::class.java)
+
+        binding.ratingSearchButton.setOnClickListener {
+            findNavController().navigate(ChoiceFragmentDirections.toSearchRating(true))
+        }
+
         binding.apply {
             audienceSearchButton.setOnClickListener {
                 try {
-                    startActivity(Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("market://details?id=com.NekoSoftworks.VguitMap")
-                    ))
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("market://details?id=com.NekoSoftworks.VguitMap")
+                        )
+                    )
                 } catch (e: ActivityNotFoundException) {
                     startActivity(
                         Intent(
@@ -51,17 +57,19 @@ class ChoiceFragment : Fragment() {
             }
 
             viewModel.getTeachers()
-            viewModel.teachers.observe(viewLifecycleOwner){ list ->
+            viewModel.teachers.observe(viewLifecycleOwner) { list ->
                 teacherSearchButton.setOnClickListener {
-                    var names = ""
-                    for (name in list.data) {
-                        names += "$name,"
-                    }
-                    findNavController().navigate(
-                        ChoiceFragmentDirections.fromChoiceToSearchResult(
-                            names
+                    if (list != null) {
+                        var names = ""
+                        for (name in list.data) {
+                            names += "$name,"
+                        }
+                        findNavController().navigate(
+                            ChoiceFragmentDirections.fromChoiceToSearchResult(
+                                names
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
