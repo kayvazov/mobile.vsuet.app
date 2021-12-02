@@ -20,7 +20,7 @@ class SearchFragmentViewModel(
 
     val teacherLessons = MutableLiveData<List<TeacherLesson>>()
 
-    fun getTeachers(name: String) {
+    fun getTeachersLessons(name: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 TeacherLessonApi.retrofitService.getProperties(name).enqueue(

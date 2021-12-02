@@ -40,7 +40,7 @@ class SearchFragment :
                 ViewModelProvider(
                     this@SearchFragment,
                     viewModelFactory
-                ).get(SearchFragmentViewModel::class.java)
+                )[SearchFragmentViewModel::class.java]
             val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
                 Calendar.TUESDAY -> "Вторник"
                 Calendar.WEDNESDAY -> "Среда"
@@ -63,7 +63,7 @@ class SearchFragment :
                 }
 
             fun checkPair() {
-                viewModel.getTeachers(otherTeacherButton.text.toString())
+                viewModel.getTeachersLessons(otherTeacherButton.text.toString())
                 var pairTime = ""
                 val recyclerAdapter = TeacherRecyclerViewAdapter()
                 viewModel.teacherLessons.observe(viewLifecycleOwner) { list ->

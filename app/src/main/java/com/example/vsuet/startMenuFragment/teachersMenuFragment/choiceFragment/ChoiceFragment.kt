@@ -62,8 +62,19 @@ class ChoiceFragment : Fragment() {
                     if (list != null) {
                         var names = ""
                         for (name in list.data) {
-                            names += "$name,"
+                            names += when {
+                                list.data.indexOf(name) == 0 -> {
+                                    "${name.substring(1)},"
+                                }
+                                list.data.indexOf(name) == list.data.lastIndex -> {
+                                    name.substring(0, name.length - 2)
+                                }
+                                else -> {
+                                    "$name,"
+                                }
+                            }
                         }
+                        println(names)
                         findNavController().navigate(
                             ChoiceFragmentDirections.fromChoiceToSearchResult(
                                 names

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vsuet.R
 import com.example.vsuet.databinding.ListDialogFragmentBinding
+import com.example.vsuet.databinding.ListDialogFragmentForDaysBinding
 import com.example.vsuet.listViewAdapter.ListViewAdapter
 import com.example.vsuet.roomDataBase.repository.RepositoryDataBase
 import com.example.vsuet.startMenuFragment.teachersMenuFragment.SearchFragmentFactory
@@ -29,7 +30,8 @@ class ListDialogFragment(
 ) :
     DialogFragment() {
 
-    private lateinit var binding: ListDialogFragmentBinding
+    private lateinit var bindingTeachers: ListDialogFragmentBinding
+    private lateinit var bindingDays: ListDialogFragmentForDaysBinding
     private lateinit var viewModelFactory: SearchFragmentFactory
     private lateinit var viewModel: SearchFragmentViewModel
 
@@ -38,7 +40,8 @@ class ListDialogFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ListDialogFragmentBinding.inflate(layoutInflater)
+        bindingTeachers = ListDialogFragmentBinding.inflate(inflater)
+        bindingDays = ListDialogFragmentForDaysBinding.inflate(inflater)
         val adapter = ListViewAdapter()
         val lessonsTable = requireActivity().findViewById<RecyclerView>(R.id.lessonTable)
         val tableContainer = requireActivity().findViewById<ConstraintLayout>(R.id.tableContainer)
@@ -59,7 +62,7 @@ class ListDialogFragment(
             }
             var pairTime = ""
             val recyclerAdapter = TeacherRecyclerViewAdapter()
-            viewModel.getTeachers(teacherName)
+            viewModel.getTeachersLessons(teacherName)
             viewModel.teacherLessons.observeForever { list ->
                 if (list.any {
                         it.day == dayContainer.text.toString()
@@ -97,30 +100,38 @@ class ListDialogFragment(
                 }
             }
         }
-
-        binding.apply {
-            listViewContainer.adapter = adapter
-            val application = requireNotNull(activity).application
-            val repository = RepositoryDataBase.getInstance(application)
-            val repositoryDataSource = repository.repositoryDao
-            dialog?.window?.attributes?.windowAnimations = R.style.dialog_anim
-            viewModelFactory = SearchFragmentFactory(repositoryDataSource, application)
-            viewModel =
-                ViewModelProvider(
-                    this@ListDialogFragment,
-                    viewModelFactory
-                ).get(SearchFragmentViewModel::class.java)
-            when (type) {
-                "OtherDay" -> {
-                    adapter.data =
-                        resources.getStringArray(R.array.daysOfTheWeek).toMutableList()
-                }
-                "Teacher" -> {
-                    adapter.data = entries!!
-                    teacherNameFilter.visibility = View.VISIBLE
-                    teacherNameFilter.post {
-                        val itemHeight = teacherNameFilter.height
-                        listViewContainer.setPadding(0, 0, 0, itemHeight)
+        if(type == "Teacher" || type == "Settings") {
+            bindingTeachers.apply {
+                listViewContainer.adapter = adapter
+                val application = requireNotNull(activity).application
+                val repository = RepositoryDataBase.getInstance(application)
+                val repositoryDataSource = repository.repositoryDao
+                dialog?.window?.attributes?.windowAnimations = R.style.dialog_anim
+                viewModelFactory = SearchFragmentFactory(repositoryDataSource, application)
+                viewModel =
+                    ViewModelProvider(
+                        this@ListDialogFragment,
+                        viewModelFactory
+                    )[SearchFragmentViewModel::class.java]
+                when (type) {
+                    "Teacher" -> {
+                        adapter.data = entries!!
+                        teacherNameFilter.visibility = View.VISIBLE
+                        teacherNameFilter.post {
+                            teacherNameFilter.addTextChangedListener {
+                                adapter.data = entries.filter {
+                                    it.startsWith(
+                                        teacherNameFilter.text.toString(),
+                                        true
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    "Settings" -> {
+                        adapter.data = entries!!
+                        teacherNameFilter.visibility = View.VISIBLE
+                        teacherNameFilter.hint = SpannableStringBuilder("Номер группы")
                         teacherNameFilter.addTextChangedListener {
                             adapter.data = entries.filter {
                                 it.startsWith(
@@ -128,62 +139,67 @@ class ListDialogFragment(
                                     true
                                 )
                             }
-                            if (adapter.count * itemHeight <= listDialogContainer.height) {
-                                listViewContainer.setPadding(0, 0, 0, 0)
-                            } else {
-                                listViewContainer.setPadding(0, 0, 0, itemHeight)
-                            }
                         }
+                    }
+
+                    else -> {
+                        adapter.data = listOf()
                     }
                 }
-                "Settings" -> {
-                    adapter.data = entries!!
-                    teacherNameFilter.visibility = View.VISIBLE
-                    teacherNameFilter.hint = SpannableStringBuilder("Номер группы")
-                    teacherNameFilter.addTextChangedListener {
-                        adapter.data = entries.filter {
-                            it.startsWith(
-                                teacherNameFilter.text.toString(),
-                                true
+                listViewContainer.setOnItemClickListener { _, _, position, _ ->
+                    when (type) {
+                        "Teacher" -> {
+                            checkPair(
+                                argNumerator!!,
+                                adapter.data[position].toString()
                             )
+                            teacherChanger.text = adapter.data[position].toString()
+                        }
+                        "Settings" -> {
+                            requireActivity().findViewById<Button>(R.id.groupTextButton).text =
+                                adapter.data[position].toString()
+                            val settingsEditor = requireActivity().getSharedPreferences(
+                                "accountSettings",
+                                Context.MODE_PRIVATE
+                            ).edit()
+                            settingsEditor.putString(
+                                "groupNumber",
+                                adapter.data[position].toString()
+                            )
+                                .apply()
+                            settingsEditor.putBoolean("isGroupChanged", true).apply()
+                        }
+                        else -> {
+                            val day = adapter.data[position].toString()
+                            dayContainer.text = day
+                            println(teacherChanger.text)
+                            checkPair(argNumerator!!, teacherChanger.text.toString())
                         }
                     }
+                    dialog?.dismiss()
+                }
+                return root
+            }
+        } else {
+            bindingDays.apply {
+
+                adapter.data =
+                    resources.getStringArray(R.array.daysOfTheWeek).toMutableList()
+                println(adapter.data)
+
+                listViewContainer.adapter = adapter
+                dialog?.window?.attributes?.windowAnimations = R.style.dialog_anim
+
+                listViewContainer.setOnItemClickListener { _, _, position, _ ->
+                    val day = adapter.data[position].toString()
+                    dayContainer.text = day
+                    println(teacherChanger.text)
+                    checkPair(argNumerator!!, teacherChanger.text.toString())
                 }
 
-                else -> {
-                    adapter.data = listOf()
-                }
+
+                return root
             }
-            listViewContainer.setOnItemClickListener { _, _, position, _ ->
-                when (type) {
-                    "Teacher" -> {
-                        checkPair(
-                            argNumerator!!,
-                            adapter.data[position].toString()
-                        )
-                        teacherChanger.text = adapter.data[position].toString()
-                    }
-                    "Settings" -> {
-                        requireActivity().findViewById<Button>(R.id.groupTextButton).text =
-                            adapter.data[position].toString()
-                        val settingsEditor = requireActivity().getSharedPreferences(
-                            "accountSettings",
-                            Context.MODE_PRIVATE
-                        ).edit()
-                        settingsEditor.putString("groupNumber", adapter.data[position].toString())
-                            .apply()
-                        settingsEditor.putBoolean("isGroupChanged", true).apply()
-                    }
-                    else -> {
-                        val day = adapter.data[position].toString()
-                        dayContainer.text = day
-                        println(teacherChanger.text)
-                        checkPair(argNumerator!!, teacherChanger.text.toString())
-                    }
-                }
-                dialog?.dismiss()
-            }
-            return root
         }
     }
 }
