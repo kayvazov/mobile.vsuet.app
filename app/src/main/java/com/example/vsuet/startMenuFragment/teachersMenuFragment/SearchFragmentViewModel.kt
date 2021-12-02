@@ -2,15 +2,11 @@ package com.example.vsuet.startMenuFragment.teachersMenuFragment
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.vsuet.API.*
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonDao
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonPair
-import com.example.vsuet.roomDataBase.repository.RepositoryDao
-import com.example.vsuet.roomDataBase.teacherDataBase.Teacher
-import com.example.vsuet.roomDataBase.teacherDataBase.TeacherDAO
+import com.example.vsuet.API.TeacherLesson
+import com.example.vsuet.API.TeacherLessonApi
+import com.example.vsuet.API.TeacherLessonProperty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,7 +15,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SearchFragmentViewModel(
-    private val repositoryDataSource: RepositoryDao,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -40,7 +35,6 @@ class SearchFragmentViewModel(
                         }
                         override fun onFailure(call: Call<TeacherLessonProperty>, t: Throwable) {
                             println(t.message)
-                            println("COCK")
                         }
                     }
                 )

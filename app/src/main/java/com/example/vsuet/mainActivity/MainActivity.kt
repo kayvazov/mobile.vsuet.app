@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             setContentView(root)
             goHomeButton.alpha = 0f
-            supportActionBar?.title = ""
             goHomeButton.setOnClickListener {
                 findNavController(R.id.nav_host_fragment).navigate(MainNavDirections.goHomeAction())
                 it.isClickable = false
@@ -27,14 +26,6 @@ class MainActivity : AppCompatActivity() {
                 findNavController(R.id.nav_host_fragment).navigate(MainNavDirections.toPersonalAccount())
                 it.isClickable = false
             }
-
         }
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-
-        println("?")
-    }
-
 }

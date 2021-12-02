@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vsuet.API.LessonProperty
 import com.example.vsuet.databinding.TabLayoutFragmentBinding
 import com.example.vsuet.lessonRecyclerView.LessonsRecyclerViewAdapter
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonDataBase
-import java.util.*
 
 class TabLayoutFragment(
     private val day: String?,
@@ -32,31 +30,18 @@ class TabLayoutFragment(
 
 
         val application = requireNotNull(this.activity).application
-        val lessonsDataBase = LessonDataBase.getInstance(requireContext())
-        val lessonsDataSource = lessonsDataBase.lessonDataBaseDao
 
-        viewModelFactory = TabLayoutViewModelFactory(application, lessonsDataSource)
+        viewModelFactory = TabLayoutViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(TabLayoutViewModel::class.java)
         val recyclerAdapter = LessonsRecyclerViewAdapter()
-
-        val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-            Calendar.TUESDAY -> "вторник"
-            Calendar.WEDNESDAY -> "среда"
-            Calendar.THURSDAY -> "четверг"
-            Calendar.FRIDAY -> "пятница"
-            Calendar.SATURDAY -> "суббота"
-            Calendar.SUNDAY -> "воскресенье"
-            else -> "понедельник"
-        }
         val personalAccountSettings =
             requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE)
         val groupName = personalAccountSettings.getString("groupNumber", "Не указана группа")!!
         val podGroup = personalAccountSettings.getString("underGroupNumber", "1")!!
-
         if (groupName != "Не указана группа") {
             recyclerAdapter.data =
                 data.filter { it.day == day && it.weekType == numerator && it.subgroup == podGroup.toInt() }
-            if(recyclerAdapter.data.isEmpty()){
+            if (recyclerAdapter.data.isEmpty()) {
                 binding.noLessonsText.visibility = View.VISIBLE
             }
         } else {
@@ -65,7 +50,6 @@ class TabLayoutFragment(
                 alpha = 0f
                 animate().alpha(1.0f).duration = 500
             }
-
         }
 
 

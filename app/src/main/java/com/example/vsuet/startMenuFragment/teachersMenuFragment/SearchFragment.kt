@@ -10,8 +10,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vsuet.databinding.SearchFragmentBinding
 import com.example.vsuet.listDialogFragment.ListDialogFragment
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonDataBase
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonPair
 import com.example.vsuet.roomDataBase.repository.RepositoryDataBase
 import com.example.vsuet.teacherRecyclerView.TeacherRecyclerViewAdapter
 import java.util.*
@@ -52,10 +50,7 @@ class SearchFragment :
                 Calendar.SUNDAY -> "Воскресенье"
                 else -> "Понедельник"
             }
-
             otherDayButton.text = dayOfWeek
-
-
             var numerator =
                 if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1) {
                     numeratorSwitch.text = "Числитель"
@@ -73,32 +68,37 @@ class SearchFragment :
                 val recyclerAdapter = TeacherRecyclerViewAdapter()
                 viewModel.teacherLessons.observe(viewLifecycleOwner) { list ->
                     println(list)
-                    println(dayContainer.text.toString()
-                        .lowercase(Locale.getDefault()))
-                    if (list.any { it.weekType == numerator && it.day == otherDayButton.text.toString()
-                            .lowercase(Locale.getDefault()) }) {
+                    println(
+                        dayContainer.text.toString()
+                            .lowercase(Locale.getDefault())
+                    )
+                    if (list.any {
+                            it.weekType == numerator && it.day == otherDayButton.text.toString()
+                                .lowercase(Locale.getDefault())
+                        }) {
                         println(list)
-                        recyclerAdapter.data = list.filter { it.weekType == numerator && it.day == otherDayButton.text.toString()
-                            .lowercase(Locale.getDefault()) }.toSet().toList()
+                        recyclerAdapter.data = list.filter {
+                            it.weekType == numerator && it.day == otherDayButton.text.toString()
+                                .lowercase(Locale.getDefault())
+                        }.toSet().toList()
                         lessonTable.adapter = recyclerAdapter
                         tableContainer.visibility = View.VISIBLE
                         lessonTable.layoutManager = LinearLayoutManager(requireContext())
                     } else {
                         tableContainer.visibility = View.GONE
                     }
-
-
-                    if (dayContainer.text.toString() == "Воскресенье" || (list.filter{it.weekType == numerator}).isEmpty()) pairTime =
+                    if (dayContainer.text.toString() == "Воскресенье" || (list.filter { it.weekType == numerator }).isEmpty()) pairTime =
                         "Выходной"
                     apply {
                         val checkNum: Boolean =
                             (Calendar.getInstance()
-                                    .get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1)
+                                .get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1)
                         responseMessage.text = when (pairTime) {
                             "Выходной" -> {
                                 responseMessage.visibility = View.VISIBLE
                                 if (numerator == checkNum && dayOfWeek == otherDayButton.text.toString()
-                                        .lowercase(Locale.getDefault())) {
+                                        .lowercase(Locale.getDefault())
+                                ) {
                                     "Сегодня у преподавателя нет пар"
                                 } else {
                                     "В этот день у преподавателя нет пар"
@@ -117,8 +117,7 @@ class SearchFragment :
                         val dialog = ListDialogFragment(
                             "OtherDay",
                             numerator,
-                            null,
-                            false
+                            null
                         )
                         dialog.show(requireActivity().supportFragmentManager, "OtherTeacherChoice")
                     }
@@ -127,8 +126,7 @@ class SearchFragment :
                     val dialog = ListDialogFragment(
                         "Teacher",
                         numerator,
-                        names,
-                        true
+                        names
                     )
                     dialog.show(requireActivity().supportFragmentManager, "OtherTeacherChoice")
                 }
@@ -144,9 +142,7 @@ class SearchFragment :
                     }
                 }
             }
-
             checkPair()
-
             return root
         }
     }

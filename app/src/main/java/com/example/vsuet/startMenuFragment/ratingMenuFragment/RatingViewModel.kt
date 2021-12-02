@@ -1,6 +1,7 @@
 package com.example.vsuet.startMenuFragment.ratingMenuFragment
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +18,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RatingViewModel(application: Application, private val repositoryDataSource: RepositoryDao) :
-    ViewModel() {
+    AndroidViewModel(application) {
 
     val rating = MutableLiveData<List<RatingItem>>()
 

@@ -2,13 +2,11 @@ package com.example.vsuet.startMenuFragment.teachersMenuFragment.choiceFragment
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.vsuet.API.*
+import com.example.vsuet.API.TeacherApi
+import com.example.vsuet.API.TeacherProperty
 import com.example.vsuet.roomDataBase.repository.RepositoryDao
-import com.example.vsuet.roomDataBase.teacherDataBase.Teacher
-import com.example.vsuet.roomDataBase.teacherDataBase.TeacherDAO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

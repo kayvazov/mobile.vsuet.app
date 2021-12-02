@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vsuet.databinding.NewsFragmentBinding
 import com.example.vsuet.newsRecyclerView.NewsRecyclerViewAdapter
@@ -31,7 +30,7 @@ class NewsFragment : Fragment() {
         viewModelFactory = NewsViewModelFactory(application, repositoryDataSource)
         viewModel = ViewModelProvider(this, viewModelFactory).get(NewsViewModel::class.java)
         viewModel.getVsuetNews()
-        val newsAdapter = NewsRecyclerViewAdapter(findNavController())
+        val newsAdapter = NewsRecyclerViewAdapter()
         binding.newsList.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(requireContext())

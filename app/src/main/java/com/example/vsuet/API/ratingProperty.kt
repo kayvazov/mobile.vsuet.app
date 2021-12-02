@@ -40,10 +40,6 @@ data class GroupItem(
 )
 
 
-data class UpgradedRatingContainer(
-    val items: List<UpgradedRatingItem>
-)
-
 @Entity
 data class RatingItem(
     @PrimaryKey @ColumnInfo(name = "_id") @field:Json(name = "_id") val _id: String,

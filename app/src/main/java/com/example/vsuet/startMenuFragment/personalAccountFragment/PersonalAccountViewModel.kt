@@ -18,7 +18,6 @@ class PersonalAccountViewModel(application: Application, val repositoryDataSourc
 
     val groups = MutableLiveData<List<Group>>()
     val internetConnection = MutableLiveData<Boolean>()
-    val faculty = MutableLiveData<String>()
     val group = MutableLiveData<String>()
 
     fun getGroups() {
@@ -69,14 +68,6 @@ class PersonalAccountViewModel(application: Application, val repositoryDataSourc
                         }
                     }
                 )
-            }
-        }
-    }
-
-    fun getData() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                groups.postValue(repositoryDataSource.getGroups())
             }
         }
     }

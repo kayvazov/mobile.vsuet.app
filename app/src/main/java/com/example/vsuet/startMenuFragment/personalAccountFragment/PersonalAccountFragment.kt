@@ -2,14 +2,12 @@ package com.example.vsuet.startMenuFragment.personalAccountFragment
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -52,20 +50,6 @@ class PersonalAccountFragment : Fragment() {
                     personalScorerContainer.visibility = View.GONE
                     personalScorerText.visibility = View.GONE
                     noInternetText.visibility = View.VISIBLE
-                    Handler(Looper.myLooper()!!).postDelayed({
-                        viewModel.getGroups()
-                    }, 5000)
-                } else {
-                    groupText.visibility = View.VISIBLE
-                    groupTextButton.visibility = View.VISIBLE
-                    underGroupButton.visibility = View.VISIBLE
-                    underGroupText.visibility = View.VISIBLE
-                    personalScorerContainer.visibility = View.VISIBLE
-                    personalScorerText.visibility = View.VISIBLE
-                    noInternetText.visibility = View.GONE
-                    Handler(Looper.myLooper()!!).postDelayed({
-                        viewModel.getGroups()
-                    }, 5000)
                 }
             }
 
@@ -90,7 +74,7 @@ class PersonalAccountFragment : Fragment() {
             viewModel.groups.observeForever { list ->
                 val groupNames = list.map { it.name }.toMutableList()
                 groupTextButton.setOnClickListener {
-                    val dialog = ListDialogFragment("Settings", null, groupNames, true)
+                    val dialog = ListDialogFragment("Settings", null, groupNames)
                     dialog.show(requireActivity().supportFragmentManager, "settingsChanger")
                 }
 
@@ -116,11 +100,16 @@ class PersonalAccountFragment : Fragment() {
                     ).getString("personalScorerNumber", "")
                 )
             }
-            personalScorerContainer.addTextChangedListener {
-                settingsEditor.putString(
-                    "personalScorerNumber",
-                    personalScorerContainer.text.toString()
-                ).apply()
+            personalScorerContainer.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE && personalScorerContainer.text.toString().length == 6) {
+                    settingsEditor.putString(
+                        "personalScorerNumber",
+                        personalScorerContainer.text.toString()
+                    ).apply()
+                    viewModel.validateStudent(personalScorerContainer.toString())
+                    return@setOnEditorActionListener true
+                }
+                false
             }
 
             viewModel.group.observe(viewLifecycleOwner) { value ->

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vsuet.API.TeacherLesson
 import com.example.vsuet.R
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonPair
 
 class TeacherRecyclerViewAdapter : RecyclerView.Adapter<TeacherViewHolder>() {
 

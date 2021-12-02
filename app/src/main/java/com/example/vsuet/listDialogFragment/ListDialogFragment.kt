@@ -25,8 +25,7 @@ import java.util.*
 class ListDialogFragment(
     private val type: String,
     private val argNumerator: Boolean?,
-    private val entries: MutableList<String>?,
-    private val toChange: Boolean
+    private val entries: MutableList<String>?
 ) :
     DialogFragment() {
 

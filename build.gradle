@@ -5,6 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+        classpath 'com.google.firebase:perf-plugin:1.4.0'
         def nav_version = "2.3.5"
 
         classpath "com.android.tools.build:gradle:7.0.3"

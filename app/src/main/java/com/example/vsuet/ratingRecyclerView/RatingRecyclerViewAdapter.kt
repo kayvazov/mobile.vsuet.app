@@ -11,9 +11,11 @@ import com.example.vsuet.API.RatingItem
 import com.example.vsuet.PointsRecyclerView.PointsRecyclerViewAdapter
 import com.example.vsuet.R
 import com.example.vsuet.disciplineInfoDialogFragment.DisciplineInfoDialogFragment
-import com.example.vsuet.pointDialogFragment.PointDialogFragment
 
-class RatingRecyclerViewAdapter(val context: Context, private val fragmentManager: FragmentManager) :
+class RatingRecyclerViewAdapter(
+    val context: Context,
+    private val fragmentManager: FragmentManager
+) :
     RecyclerView.Adapter<RatingViewHolder>() {
 
     var data = listOf<RatingItem>()
@@ -31,10 +33,12 @@ class RatingRecyclerViewAdapter(val context: Context, private val fragmentManage
         val item = data[position]
 
         holder.apply {
-            val adapter = PointsRecyclerViewAdapter(fragmentManager)
-            adapter.data = item.upgradedRating
-            pointsRecycler.adapter = adapter
-            pointsRecycler.layoutManager = LinearLayoutManager(context)
+            val recyclerAdapter = PointsRecyclerViewAdapter(fragmentManager)
+            recyclerAdapter.data = item.upgradedRating
+            pointsRecycler.apply {
+                adapter = recyclerAdapter
+                layoutManager = LinearLayoutManager(context)
+            }
             disciplineName.text = item.lesson.name
             disciplineType.text = item.lesson.type
             disciplinePoints.text = "Итоговый рейтинг: " + item.value[26]

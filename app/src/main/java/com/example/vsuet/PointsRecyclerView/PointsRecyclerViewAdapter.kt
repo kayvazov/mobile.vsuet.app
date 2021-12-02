@@ -9,7 +9,8 @@ import com.example.vsuet.API.UpgradedRatingItem
 import com.example.vsuet.R
 import com.example.vsuet.pointDialogFragment.PointDialogFragment
 
-class PointsRecyclerViewAdapter(val fragmentManager: FragmentManager) : RecyclerView.Adapter<PointViewHolder>() {
+class PointsRecyclerViewAdapter(private val fragmentManager: FragmentManager) :
+    RecyclerView.Adapter<PointViewHolder>() {
 
     var data = listOf<UpgradedRatingItem>()
         @SuppressLint("NotifyDataSetChanged")
@@ -26,10 +27,12 @@ class PointsRecyclerViewAdapter(val fragmentManager: FragmentManager) : Recycler
         val item = data[position]
 
         holder.apply {
-            pointNumber.text = item.total.name + " - " + item.total.score
-            pointNumber.setOnClickListener {
-                val dialog = PointDialogFragment(item.items)
-                dialog.show(fragmentManager, "PointInfo")
+            pointNumber.apply {
+                text = item.total.name + " - " + item.total.score
+                setOnClickListener {
+                    val dialog = PointDialogFragment(item.items)
+                    dialog.show(fragmentManager, "PointInfo")
+                }
             }
         }
 

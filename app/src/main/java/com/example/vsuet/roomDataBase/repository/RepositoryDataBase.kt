@@ -11,7 +11,7 @@ import com.example.vsuet.TypeConverters.Converters
 
 @Database(entities = [LessonProperty::class, RatingItem::class, NewsPost::class, Group::class, TeacherProperty::class], version = 5)
 @TypeConverters(Converters::class)
-abstract class RepositoryDataBase() : RoomDatabase() {
+abstract class RepositoryDataBase : RoomDatabase() {
     abstract val repositoryDao: RepositoryDao
 
     companion object {

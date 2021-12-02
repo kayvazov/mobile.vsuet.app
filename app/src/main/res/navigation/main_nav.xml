@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_nav"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_nav"
-    app:startDestination="@id/startMenuFragment">
+    app:startDestination="@id/startMenuFragment"
+    tools:ignore="ExtraText">
 
     <fragment
         android:id="@+id/searchFragment"
@@ -56,6 +57,7 @@
             app:popUpTo="@id/startMenuFragment"
             app:popUpToInclusive="false" />
     </fragment>
+
     <action
         android:id="@+id/goHomeAction"
         app:destination="@id/startMenuFragment"
@@ -101,7 +103,11 @@
             app:popUpTo="@id/choiceFragment" />
         <action
             android:id="@+id/toSearchRating"
-            app:destination="@id/ratingFragment" />
+            app:destination="@id/ratingFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/personalAccountFragment"

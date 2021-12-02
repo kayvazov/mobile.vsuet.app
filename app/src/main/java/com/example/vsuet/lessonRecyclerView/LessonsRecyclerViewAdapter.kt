@@ -4,12 +4,11 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vsuet.R
 import com.example.vsuet.API.LessonProperty
+import com.example.vsuet.R
 
 
-class LessonsRecyclerViewAdapter(
-) : RecyclerView.Adapter<LessonViewHolder>() {
+class LessonsRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
 
     var data = listOf<LessonProperty>()
         @SuppressLint("NotifyDataSetChanged")

@@ -7,7 +7,8 @@ import java.lang.IllegalArgumentException
 
 class NewsInsideViewModelFactory(private val insideLink: String, val application: Application) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(NewsInsideViewModel::class.java)){
             return NewsInsideViewModel(insideLink, application) as T
         }

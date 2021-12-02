@@ -32,15 +32,15 @@
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.937"
-        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+        app:layout_constraintVertical_bias="0.937" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/personalAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:contentDescription="TODO"
+        android:focusable="true"
+        android:contentDescription="nothing"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -21,7 +21,7 @@ import retrofit2.Response
 class NewsViewModel(application: Application, private val repositoryDataSource: RepositoryDao) : ViewModel() {
 
 
-    val itemsList = MutableLiveData<List<NewsItem>>()
+    private val itemsList = MutableLiveData<List<NewsItem>>()
     val response = MutableLiveData<List<NewsPost>>()
 
     private suspend fun getRawVsuetNews() {
@@ -70,14 +70,6 @@ class NewsViewModel(application: Application, private val repositoryDataSource: 
 
                     }
                 )
-            }
-        }
-    }
-
-    fun getData(){
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                response.postValue(repositoryDataSource.getNews())
             }
         }
     }

@@ -3,18 +3,15 @@ package com.example.vsuet.startMenuFragment.scheduleMenuFragment.tabLayoutFragme
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.vsuet.roomDataBase.lessonDataBase.LessonDao
-import java.lang.IllegalArgumentException
 
 class TabLayoutViewModelFactory(
-    val application: Application,
-    private val lessonsDataSource: LessonDao
+    val application: Application
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TabLayoutViewModel::class.java)) {
-            return TabLayoutViewModel(application, lessonsDataSource) as T
+            return TabLayoutViewModel(application) as T
         } else {
             throw IllegalArgumentException("OmegaLUL")
         }
