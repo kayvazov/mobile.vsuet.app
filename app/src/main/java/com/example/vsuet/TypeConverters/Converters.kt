@@ -1,10 +1,7 @@
 package com.example.vsuet.TypeConverters
 
 import androidx.room.TypeConverter
-import com.example.vsuet.API.AttachmentItem
-import com.example.vsuet.API.LessonTime
-import com.example.vsuet.API.RatingLesson
-import com.example.vsuet.API.UpgradedRatingItem
+import com.example.vsuet.API.*
 import com.google.gson.Gson
 
 class Converters {
@@ -38,9 +35,47 @@ class Converters {
                 result += Gson().toJson(item) + ","
             }
         }
-        println(result)
         return result
     }
+
+    @TypeConverter
+    fun fromTeacherLessons(teacherLessons: List<TeacherLesson>?): String {
+        var result = ""
+        if (teacherLessons != null) {
+            for (item in teacherLessons) {
+                result += Gson().toJson(item) + ","
+            }
+        }
+        return result
+    }
+
+    @TypeConverter
+    fun toTeacherLessons(teacherLessons: String): List<TeacherLesson> {
+        val result = Gson().fromJson("[$teacherLessons]", Array<TeacherLesson>::class.java)
+        return result.toList()
+    }
+
+    @TypeConverter
+    fun fromIntList(list: List<Int>?): String {
+        var result = ""
+        if (list != null) {
+            for (item in list) {
+                result += "$item,"
+            }
+        }
+        return result
+    }
+
+    @TypeConverter
+    fun toIntList(list: String): List<Int> {
+        val ourIntList = list.split(",").subList(0, list.lastIndex - 1)
+        val result = mutableListOf<Int>()
+        for (i in ourIntList){
+            result.add(i.toInt())
+        }
+        return result
+    }
+
 
     @TypeConverter
     fun toAttachments(json: String?): List<AttachmentItem> {

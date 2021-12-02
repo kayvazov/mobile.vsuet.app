@@ -9,7 +9,7 @@ import com.example.vsuet.API.*
 import com.example.vsuet.TypeConverters.Converters
 
 
-@Database(entities = [LessonProperty::class, RatingItem::class, NewsPost::class, Group::class, TeacherProperty::class], version = 5)
+@Database(entities = [LessonProperty::class, RatingItem::class, NewsPost::class, Group::class, TeacherProperty::class, TeacherLesson::class], version = 6)
 @TypeConverters(Converters::class)
 abstract class RepositoryDataBase : RoomDatabase() {
     abstract val repositoryDao: RepositoryDao

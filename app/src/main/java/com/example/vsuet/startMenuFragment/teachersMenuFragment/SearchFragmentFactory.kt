@@ -13,7 +13,7 @@ class SearchFragmentFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SearchFragmentViewModel::class.java)) return SearchFragmentViewModel(
-            application
+            application, repositoryDao
         ) as T
         throw IllegalArgumentException("wrong model")
     }

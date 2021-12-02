@@ -64,7 +64,7 @@ class ChoiceFragment : Fragment() {
                         for (name in list.data) {
                             names += when {
                                 list.data.indexOf(name) == 0 -> {
-                                    "${name.substring(1)},"
+                                    "${name.removePrefix("[")},"
                                 }
                                 list.data.indexOf(name) == list.data.lastIndex -> {
                                     name.substring(0, name.length - 2)

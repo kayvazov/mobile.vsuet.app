@@ -1,5 +1,6 @@
 package com.example.vsuet.startMenuFragment.teachersMenuFragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -63,11 +64,18 @@ class SearchFragment :
                 }
 
             fun checkPair() {
-                viewModel.getTeachersLessons(otherTeacherButton.text.toString())
+                val isDataBaseCreated = requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE)
+                    .getBoolean("isTeacherLessonsDBCreated", false)
+                viewModel.getTeachersLessons(otherTeacherButton.text.toString(), isDataBaseCreated)
                 var pairTime = ""
                 val recyclerAdapter = TeacherRecyclerViewAdapter()
                 viewModel.teacherLessons.observe(viewLifecycleOwner) { list ->
                     println(list)
+                    if(list.isNotEmpty()){
+                        requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE).edit()
+                            .putBoolean("isTeacherLessonsDBCreated", true).apply()
+                    }
+
                     println(
                         dayContainer.text.toString()
                             .lowercase(Locale.getDefault())

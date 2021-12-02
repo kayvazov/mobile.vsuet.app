@@ -24,6 +24,9 @@ interface RepositoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTeachers(data: TeacherProperty)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTeacherLessons(data: List<TeacherLesson>)
+
     @Query("SELECT * FROM lessonProperty")
     fun getSchedule() : List<LessonProperty>
 
@@ -38,6 +41,9 @@ interface RepositoryDao {
 
     @Query("SELECT * FROM teacherproperty")
     fun getTeachers() : TeacherProperty
+
+    @Query("SELECT * FROM teacherlesson")
+    fun getTeacherLessons() : List<TeacherLesson>
 
 
 }

@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vsuet.R
 import com.example.vsuet.databinding.ListDialogFragmentBinding
@@ -62,7 +63,10 @@ class ListDialogFragment(
             }
             var pairTime = ""
             val recyclerAdapter = TeacherRecyclerViewAdapter()
-            viewModel.getTeachersLessons(teacherName)
+            val isDataBaseCreated = requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE)
+                .getBoolean("isTeacherLessonsDBCreated", false)
+            println(isDataBaseCreated)
+            viewModel.getTeachersLessons(teacherName, isDataBaseCreated)
             viewModel.teacherLessons.observeForever { list ->
                 if (list.any {
                         it.day == dayContainer.text.toString()
@@ -72,7 +76,10 @@ class ListDialogFragment(
                         it.day == dayContainer.text.toString()
                             .lowercase(Locale.getDefault()) && it.weekType == numerator
                     }.toSet().toList()
+                    println("DATA")
+                    println(recyclerAdapter.data)
                     lessonsTable.adapter = recyclerAdapter
+                    lessonsTable.layoutManager = LinearLayoutManager(requireContext())
                     tableContainer.visibility = View.VISIBLE
                     responseMessage.visibility = View.VISIBLE
                 } else {
@@ -100,19 +107,21 @@ class ListDialogFragment(
                 }
             }
         }
+
+        val application = requireNotNull(activity).application
+        val repository = RepositoryDataBase.getInstance(application)
+        val repositoryDataSource = repository.repositoryDao
+        dialog?.window?.attributes?.windowAnimations = R.style.dialog_anim
+        viewModelFactory = SearchFragmentFactory(repositoryDataSource, application)
+        viewModel =
+            ViewModelProvider(
+                this@ListDialogFragment,
+                viewModelFactory
+            )[SearchFragmentViewModel::class.java]
+
         if(type == "Teacher" || type == "Settings") {
             bindingTeachers.apply {
                 listViewContainer.adapter = adapter
-                val application = requireNotNull(activity).application
-                val repository = RepositoryDataBase.getInstance(application)
-                val repositoryDataSource = repository.repositoryDao
-                dialog?.window?.attributes?.windowAnimations = R.style.dialog_anim
-                viewModelFactory = SearchFragmentFactory(repositoryDataSource, application)
-                viewModel =
-                    ViewModelProvider(
-                        this@ListDialogFragment,
-                        viewModelFactory
-                    )[SearchFragmentViewModel::class.java]
                 when (type) {
                     "Teacher" -> {
                         adapter.data = entries!!
@@ -172,7 +181,6 @@ class ListDialogFragment(
                         else -> {
                             val day = adapter.data[position].toString()
                             dayContainer.text = day
-                            println(teacherChanger.text)
                             checkPair(argNumerator!!, teacherChanger.text.toString())
                         }
                     }
@@ -185,16 +193,13 @@ class ListDialogFragment(
 
                 adapter.data =
                     resources.getStringArray(R.array.daysOfTheWeek).toMutableList()
-                println(adapter.data)
 
                 listViewContainer.adapter = adapter
-                dialog?.window?.attributes?.windowAnimations = R.style.dialog_anim
-
                 listViewContainer.setOnItemClickListener { _, _, position, _ ->
                     val day = adapter.data[position].toString()
                     dayContainer.text = day
-                    println(teacherChanger.text)
                     checkPair(argNumerator!!, teacherChanger.text.toString())
+                    dialog?.dismiss()
                 }
 
 
