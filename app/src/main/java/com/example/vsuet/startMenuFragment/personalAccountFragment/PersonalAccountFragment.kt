@@ -106,13 +106,14 @@ class PersonalAccountFragment : Fragment() {
                         "personalScorerNumber",
                         personalScorerContainer.text.toString()
                     ).apply()
-                    viewModel.validateStudent(personalScorerContainer.toString())
+                    viewModel.validateStudent(personalScorerContainer.text.toString())
                     return@setOnEditorActionListener true
                 }
                 false
             }
 
             viewModel.group.observe(viewLifecycleOwner) { value ->
+                println(value)
                 if (value == "Invalid") {
                     Toast.makeText(
                         requireContext(),
@@ -124,13 +125,6 @@ class PersonalAccountFragment : Fragment() {
                         settingsEditor.putString("groupNumber", value)
                         groupTextButton.text = value
                     }
-                }
-            }
-
-            personalScorerContainer.doAfterTextChanged { text ->
-                if (text.toString().length == 6) {
-                    viewModel.validateStudent(text.toString())
-
                 }
             }
 

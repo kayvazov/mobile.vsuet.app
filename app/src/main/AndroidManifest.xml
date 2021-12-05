@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.NFC" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PrepodSearch">
         <activity
+            android:launchMode="singleTop"
             android:name="com.example.vsuet.splashScreenActivity.SplashActivity"
             android:exported="true"
             android:label="ВГУИТ"
@@ -25,9 +27,35 @@
             </intent-filter>
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name="com.example.vsuet.mainActivity.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing" >
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".scheduleWidget.ScheduleWidget"
+            android:icon="@android:drawable/star_big_on"
+            android:label="ScheduleWidget"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="android.appwidget.action.APPWIDGET_UPDATE">
+                </action>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_meta_data">
+            </meta-data>
+        </receiver>
+
     </application>
+
+
 
 </manifest>

@@ -37,6 +37,10 @@ class ScheduleViewModel(application: Application, private val repositoryDataSour
                                 insertData(response.body()?.data?.lessons!!)
                             }
 
+                            println("TIME $time")
+                            println("UPDATED TIME ${updatedTime.value}")
+                            println("UPDATED TIME 2 ${response.body()?.data?.updatedTime}")
+                            println(isNewGroup)
                             if(updatedTime.value == time && !isNewGroup){
                                 getData()
                             }

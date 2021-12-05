@@ -1,6 +1,8 @@
 package com.example.vsuet.mainActivity
 
+import android.nfc.NfcAdapter
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.example.vsuet.MainNavDirections
@@ -27,5 +29,10 @@ class MainActivity : AppCompatActivity() {
                 it.isClickable = false
             }
         }
+        val nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        if(nfcAdapter == null){
+            Toast.makeText(this, "GIGASADGE", Toast.LENGTH_SHORT).show()
+        }
     }
+
 }

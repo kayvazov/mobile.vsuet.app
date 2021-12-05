@@ -45,7 +45,6 @@ class ListDialogFragment(
         bindingDays = ListDialogFragmentForDaysBinding.inflate(inflater)
         val adapter = ListViewAdapter()
         val lessonsTable = requireActivity().findViewById<RecyclerView>(R.id.lessonTable)
-        val tableContainer = requireActivity().findViewById<ConstraintLayout>(R.id.tableContainer)
         val responseMessage = requireActivity().findViewById<TextView>(R.id.responseMessage)
         val teacherChanger = requireActivity().findViewById<Button>(R.id.otherTeacherButton)
         val dayContainer = requireActivity().findViewById<Button>(R.id.otherDayButton)
@@ -79,11 +78,10 @@ class ListDialogFragment(
                     println("DATA")
                     println(recyclerAdapter.data)
                     lessonsTable.adapter = recyclerAdapter
-                    lessonsTable.layoutManager = LinearLayoutManager(requireContext())
-                    tableContainer.visibility = View.VISIBLE
+                    lessonsTable.visibility = View.VISIBLE
                     responseMessage.visibility = View.VISIBLE
                 } else {
-                    tableContainer.visibility = View.GONE
+                    lessonsTable.visibility = View.GONE
                 }
                 if (dayContainer.text.toString() == "Воскресенье" || list.isEmpty()) pairTime =
                     "Выходной"
@@ -127,6 +125,7 @@ class ListDialogFragment(
                         adapter.data = entries!!
                         teacherNameFilter.visibility = View.VISIBLE
                         teacherNameFilter.post {
+                            val itemHeight = teacherNameFilter.height
                             teacherNameFilter.addTextChangedListener {
                                 adapter.data = entries.filter {
                                     it.startsWith(
@@ -134,6 +133,10 @@ class ListDialogFragment(
                                         true
                                     )
                                 }
+
+                                val heightAdapter = listViewContainer.layoutParams
+                                heightAdapter.height = adapter.count * itemHeight
+
                             }
                         }
                     }

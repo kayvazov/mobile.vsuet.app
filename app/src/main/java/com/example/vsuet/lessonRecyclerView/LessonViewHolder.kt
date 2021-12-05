@@ -12,5 +12,7 @@ class LessonViewHolder(lessonTicket: View) : RecyclerView.ViewHolder(lessonTicke
     val lessonName : TextView = lessonTicket.findViewById(R.id.lessonName)
     val lessonTeacher : TextView = lessonTicket.findViewById(R.id.lessonTeacher)
     val lessonClass : TextView = lessonTicket.findViewById(R.id.lessonClass)
+    val lessonIndicator : TextView = lessonTicket.findViewById(R.id.lessonIndicator)
+    val lessonType: TextView = lessonTicket.findViewById(R.id.lessonType)
 
 }

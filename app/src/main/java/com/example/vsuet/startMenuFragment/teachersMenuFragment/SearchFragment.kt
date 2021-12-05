@@ -51,6 +51,7 @@ class SearchFragment :
                 Calendar.SUNDAY -> "Воскресенье"
                 else -> "Понедельник"
             }
+            lessonTable.layoutManager = LinearLayoutManager(requireContext())
             otherDayButton.text = dayOfWeek
             var numerator =
                 if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1) {
@@ -90,10 +91,9 @@ class SearchFragment :
                                 .lowercase(Locale.getDefault())
                         }.toSet().toList()
                         lessonTable.adapter = recyclerAdapter
-                        tableContainer.visibility = View.VISIBLE
-                        lessonTable.layoutManager = LinearLayoutManager(requireContext())
+                        lessonTable.visibility = View.VISIBLE
                     } else {
-                        tableContainer.visibility = View.GONE
+                        lessonTable.visibility = View.GONE
                     }
                     if (dayContainer.text.toString() == "Воскресенье" || (list.filter { it.weekType == numerator }).isEmpty()) pairTime =
                         "Выходной"

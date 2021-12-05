@@ -91,7 +91,7 @@ class RatingFragment : Fragment() {
                                 sumOfRating += rating.value[26].toInt()
                             }
                             averageRatingText.text =
-                                averageRatingText.text.toString() + (sumOfRating.toFloat() / list.size).toString()
+                                "Средний рейтинг" + (sumOfRating.toFloat() / list.size).toString()
                         }
                 }
             }

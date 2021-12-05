@@ -1,12 +1,18 @@
 package com.example.vsuet.startMenuFragment.scheduleMenuFragment
 
 import android.content.Context
+import android.content.Intent
+import android.nfc.NdefMessage
+import android.nfc.NfcAdapter
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.example.vsuet.databinding.ScheduleFragmentBinding
 import com.example.vsuet.roomDataBase.repository.RepositoryDataBase
 import com.example.vsuet.viewPagerAdapter.DaysViewPagerAdapter
@@ -14,7 +20,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import java.util.*
 
 class ScheduleFragment : Fragment() {
-
 
     private lateinit var binding: ScheduleFragmentBinding
     private lateinit var viewModel: ScheduleViewModel
@@ -24,6 +29,9 @@ class ScheduleFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
+
         binding = ScheduleFragmentBinding.inflate(inflater)
         var numerator =
             if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1) {
@@ -59,6 +67,7 @@ class ScheduleFragment : Fragment() {
 
 
         viewModel.schedule.observe(viewLifecycleOwner) { list ->
+
             viewModel.updatedTime.observe(viewLifecycleOwner) {
                 personalAccountSettings.edit().putString("updatedTime", it).apply()
             }
@@ -66,7 +75,6 @@ class ScheduleFragment : Fragment() {
             binding.apply {
                 progressBar2.visibility = View.GONE
                 daysTabLayout.visibility = View.VISIBLE
-
                 scheduleNumeratorButton.setOnClickListener {
                     val currentItem = daysPager.currentItem
                     numerator = if (!numerator) {
@@ -76,8 +84,6 @@ class ScheduleFragment : Fragment() {
                         scheduleNumeratorButton.text = "Знаменатель"
                         false
                     }
-
-
                     daysPager.adapter =
                         DaysViewPagerAdapter(
                             requireActivity().supportFragmentManager,
@@ -85,13 +91,12 @@ class ScheduleFragment : Fragment() {
                             numerator,
                             list
                         )
+                    daysPager.registerOnPageChangeCallback(ViewPagerInfiniteCallback(it as ViewPager2))
                     daysPager.setCurrentItem(currentItem, false)
                     TabLayoutMediator(daysTabLayout, daysPager) { tab, position ->
                         tab.text = days[position]
                     }.attach()
-
                 }
-
                 daysPager.adapter =
                     DaysViewPagerAdapter(
                         requireActivity().supportFragmentManager,
@@ -110,6 +115,27 @@ class ScheduleFragment : Fragment() {
         }
 
 
+
         return binding.root
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.apply {
+            daysPager.unregisterOnPageChangeCallback(ViewPagerInfiniteCallback(daysPager))
+        }
+    }
+
+    class ViewPagerInfiniteCallback(private val viewPager: ViewPager2) : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            when (position) {
+                0 -> viewPager.setCurrentItem(9, false)
+                8 -> viewPager.setCurrentItem(1, false)
+            }
+        }
+    }
+
+
+
 }

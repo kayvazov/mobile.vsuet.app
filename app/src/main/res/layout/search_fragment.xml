@@ -7,34 +7,23 @@
     android:layout_gravity="center"
     tools:context=".startMenuFragment.teachersMenuFragment.SearchFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/tableContainer"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lessonTable"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
+        android:background="@drawable/spinner_background"
+        android:overScrollMode="never"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/responseMessage"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lessonTable"
-            android:layout_width="0dp"
-            android:overScrollMode="never"
-            android:layout_height="0dp"
-            android:background="@drawable/spinner_background"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:visibility="visible" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/responseMessage"
@@ -65,7 +54,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@id/tableContainer"
+        app:layout_constraintTop_toBottomOf="@id/lessonTable"
         app:layout_constraintVertical_bias="0.03"
         tools:ignore="TouchTargetSizeCheck" />
 
@@ -108,10 +97,10 @@
 
     <TextView
         android:id="@+id/dayContainer"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMaxTextSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="16sp"
+        android:autoSizeTextType="uniform"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

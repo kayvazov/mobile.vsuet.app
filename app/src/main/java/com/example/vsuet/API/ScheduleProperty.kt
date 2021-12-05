@@ -32,6 +32,7 @@ data class LessonProperty(
 
 data class LessonTime(
     @field:Json(name = "start") val start: String,
-    @field:Json(name = "end") val end: String
+    @field:Json(name = "end") val end: String,
+    var isCurrent: Boolean = false
 )
 
