@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import json
 import os
 import sys
+import copy
 
 r = requests.get("https://vsuet.ru/obuchenie/faculties")
 soup = BeautifulSoup(r.content, features="html.parser")
@@ -44,15 +45,12 @@ for i in all_a:
     sotrs = []
     all_mem = soup.find_all(class_ = "persons__info")
     for i in all_mem:
-        sotr = []
-        fio = i.find(class_ = "fio").text
-        fio = fio.strip()
-        dolzhn = i.find(class_ = "dolzhn").text
-        regal = i.find(class_ = "regal").text
-        regal = regal.strip()
-        sotr.append(fio)
-        sotr.append(dolzhn)
-        sotr.append(regal)
+        sotr = {}
+        #fio = i.find(class_ = "fio").text
+        sotr["fio"] = i.find(class_ = "fio").text.strip()
+        sotr["dolzhn"] = i.find(class_ = "dolzhn").text
+        #regal = i.find(class_ = "regal").text
+        sotr["regal"] = i.find(class_ = "regal").text.strip()
         sotrs.append(sotr)
     fac["members"] = sotrs
     
@@ -61,7 +59,6 @@ for i in all_a:
     contacts['tel'] = soup.find(class_ = "fas fa-phone").next_element.next_element.text.split(',\r\n')
     contacts['address'] = soup.find(class_ = "fas fa-map-marker").next_element.next_element.text
     fac["contacts"] = contacts
-    
     
     
     if fac["name"] == 'Экология и химическая технология ':
@@ -111,12 +108,15 @@ for i in all_a:
                 prof_speccc = jaja.next_element.next_element.next_element.next_element.next_element.next_element.next_element
             else:
                 prof_speccc = jaja.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element.next_element
-            speco_mini = [code_speccc, name_speccc, prof_speccc]
-            speco_large.append(speco_mini)
+            speco_mini = {}
+            speco_mini["code_speccc"] = code_speccc
+            speco_mini["name_speccc"] = name_speccc
+            speco_mini["prof_speccc"] = prof_speccc
+            speco_large.append(copy.copy(speco_mini))
 
         speco["name"] = "аспирантура"
         speco["table"] = speco_large
-        all_speco.append(speco.copy())
+        all_speco.append(copy.copy(speco))
         fac["specialization"] = all_speco
 
             
@@ -162,6 +162,7 @@ for i in all_a:
         stop = len(alla)
         counte = -1
 
+
         if (soup.find_all(class_ = "table table-bordered") == []) and (soup.find_all(class_ = "table table-bordered table-hover fs-16") != []):
             for gub in soup.find_all(class_ = "table table-bordered table-hover fs-16"):
                 counte += 1
@@ -172,13 +173,16 @@ for i in all_a:
                 gub_sub = gub.find_all("tbody")
                 for sub in gub_sub:
                     for sub_sub in sub.find_all("tr"):
-                        cod_s = sub_sub.find_all('td')[0].text
-                        name_s = sub_sub.find_all('td')[1].text
-                        prof_s = sub_sub.find_all('td')[2].text.rstrip().replace("\n", " ")
-                        spec_mini = [cod_s, name_s, prof_s]
-                        specos.append(spec_mini)
+                        spec_mini = {}
+                        spec_mini["id"] = sub_sub.find_all('td')[0].text
+                        spec_mini["name"] = sub_sub.find_all('td')[1].text
+                        spec_mini["profiles"] = sub_sub.find_all('td')[2].text.rstrip().replace("\n", " ")
+                        specos.append(copy.copy(spec_mini))
                     speco['table'] = specos
-                all_speco.append(speco)
+                    specos = []
+                all_speco.append(copy.copy(speco))
+            fac["specialization"] = all_speco
+
 
         elif (soup.find_all(class_ = "table table-bordered") == []) and (soup.find_all(class_ = "table table-bordered fs-16") != []):
             for gub in soup.find_all(class_ = "table table-bordered fs-16"):
@@ -190,13 +194,15 @@ for i in all_a:
                 gub_sub = gub.find_all("tbody")
                 for sub in gub_sub:
                     for sub_sub in sub.find_all("tr"):
-                        cod_s = sub_sub.find_all('td')[0].text
-                        name_s = sub_sub.find_all('td')[1].text
-                        prof_s = sub_sub.find_all('td')[2].text.rstrip().replace("\n", " ")
-                        spec_mini = [cod_s, name_s, prof_s]
-                        specos.append(spec_mini)
+                        spec_mini = {}
+                        spec_mini["id"] = sub_sub.find_all('td')[0].text
+                        spec_mini["name"] = sub_sub.find_all('td')[1].text
+                        spec_mini["profiles"] = sub_sub.find_all('td')[2].text.rstrip().replace("\n", " ")
+                        specos.append(copy.copy(spec_mini))
                     speco['table'] = specos
-                all_speco.append(speco)        
+                    specos = []
+                all_speco.append(copy.copy(speco))
+            fac["specialization"] = all_speco
 
         else:
             for gub in soup.find_all(class_ = "table table-bordered"):
@@ -208,29 +214,35 @@ for i in all_a:
                 gub_sub = gub.find_all("tbody")
                 for sub in gub_sub:
                     for sub_sub in sub.find_all("tr"):
-                        cod_s = sub_sub.find_all('td')[0].text
-                        name_s = sub_sub.find_all('td')[1].text
-                        prof_s = sub_sub.find_all('td')[2].text.rstrip().replace("\n", " ")
-                        spec_mini = [cod_s, name_s, prof_s]
-                        specos.append(spec_mini)
+                        spec_mini = {}
+                        spec_mini["id"] = sub_sub.find_all('td')[0].text
+                        spec_mini["name"] = sub_sub.find_all('td')[1].text
+                        spec_mini["profiles"] = sub_sub.find_all('td')[2].text.rstrip().replace("\n", " ")
+                        specos.append(copy.copy(spec_mini))
                     speco['table'] = specos
-                all_speco.append(speco)
-        fac["specialization"] = all_speco
+                    specos = []
+                all_speco.append(copy.copy(speco))
+            fac["specialization"] = all_speco
+
         
-        
+
+
     a = -1
     cafd = soup.find(class_ = "aside aside-left sticky-top").find_all(class_ = "nav-link")
     li_ca = {}
+    all_li = []
     for ar in cafd:
         a += 1
         if "Кафедра" not in ar.get_text():
             del cafd[a:]
             break
         else:
-            li_ca[ar.get_text()] = "https://vsuet.ru/" + ar['href']
-            cafd[a] =  ar
-    fac["cafedr"] = li_ca
-    
+            li_ca["name"] = ar.get_text()
+            li_ca["hyper"] = "https://vsuet.ru/" + ar['href']
+            cafd[a] = ar
+            all_li.append(copy.deepcopy(li_ca))
+    fac["cafedr"] = all_li
+
     
     
     
