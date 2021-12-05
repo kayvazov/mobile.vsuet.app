@@ -71,13 +71,9 @@ class LessonsRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
 
             val nameMarginToChange = lessonName.layoutParams as ConstraintLayout.LayoutParams
             if (((startTimeHours % 12 < hours && endTimeHours % 12 >= hours && endTimeMinutes < minutes) || ((startTimeHours % 12 == hours && startTimeMinutes > minutes) || (endTimeHours % 12 == hours && endTimeMinutes < minutes))) && item.day == dayOfWeek) {
-                println(item.time)
-                println(hours)
-                println(minutes)
                 lessonIndicator.text = "Занятие идёт"
                 lessonIndicator.setTextColor(Color.parseColor("#FF0000"))
                 item.time.isCurrent = true
-                println("CURRENT")
             } else if (data.indexOf(item) != 0) {
                 if (data[position - 1].time.isCurrent) {
                     item.time.isCurrent = false

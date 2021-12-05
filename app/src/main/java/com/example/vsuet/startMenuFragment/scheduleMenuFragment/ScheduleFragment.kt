@@ -91,7 +91,6 @@ class ScheduleFragment : Fragment() {
                             numerator,
                             list
                         )
-                    daysPager.registerOnPageChangeCallback(ViewPagerInfiniteCallback(it as ViewPager2))
                     daysPager.setCurrentItem(currentItem, false)
                     TabLayoutMediator(daysTabLayout, daysPager) { tab, position ->
                         tab.text = days[position]
@@ -109,7 +108,8 @@ class ScheduleFragment : Fragment() {
                 }.attach()
 
                 val day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
-                binding.daysPager.setCurrentItem(day - 2, false)
+                println(day)
+                binding.daysPager.setCurrentItem(day - 1, false)
 
             }
         }

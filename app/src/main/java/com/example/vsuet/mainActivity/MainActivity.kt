@@ -29,10 +29,6 @@ class MainActivity : AppCompatActivity() {
                 it.isClickable = false
             }
         }
-        val nfcAdapter = NfcAdapter.getDefaultAdapter(this)
-        if(nfcAdapter == null){
-            Toast.makeText(this, "GIGASADGE", Toast.LENGTH_SHORT).show()
-        }
     }
 
 }

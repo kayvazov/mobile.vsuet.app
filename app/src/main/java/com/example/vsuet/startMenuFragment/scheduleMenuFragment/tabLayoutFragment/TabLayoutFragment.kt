@@ -68,9 +68,12 @@ class TabLayoutFragment(
             val hours = calendar.get(Calendar.HOUR)
             val minutes = calendar.get(Calendar.MINUTE)
 
+            val currentNumerator =
+                Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1
+
             if (groupName != "Не указана группа") {
                 recyclerAdapter.data =
-                    data.filter { it.day == day && it.weekType == numerator && it.subgroup == podGroup.toInt() }
+                    data.filter { it.day == day && it.weekType == numerator && it.subgroup == podGroup.toInt() && groupName == it.group}
                 if (recyclerAdapter.data.isEmpty() || (endTimeHours % 12 < hours || (endTimeMinutes < minutes && endTimeHours % 12 == hours)) && day == dayOfWeek) {
                     binding.noLessonsText.visibility = View.VISIBLE
                     val noLessonsMargin =
@@ -87,32 +90,29 @@ class TabLayoutFragment(
                         "воскресенье"
                     )
                     for (i in days.indexOf(day) + 1 until days.size) {
-                        if (data.any { it.day == days[i] && it.weekType == numerator && it.subgroup == podGroup.toInt() }) {
+                        if (data.any { it.day == days[i] && it.weekType == currentNumerator && it.subgroup == podGroup.toInt() && groupName == it.group}) {
                             nextDay = days[i]
                             break
                         }
                     }
                     if (nextDay == "") {
                         for (i in days) {
-                            if (data.any { it.day == i && it.weekType == !numerator && it.subgroup == podGroup.toInt() }) {
-                                println("?")
+                            if (data.any { it.day == i && it.weekType == !currentNumerator && it.subgroup == podGroup.toInt() && groupName == it.group}) {
                                 nextDay = i
                                 println(nextDay)
                                 if (nextDay == "суббота" || nextDay == "восресенье") {
                                     recyclerAdapter.data =
-                                        data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == !numerator}
+                                        data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == !currentNumerator && groupName == it.group}
                                 } else {
-                                    println("????")
                                     recyclerAdapter.data =
-                                        data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == !numerator}
-                                    println()
+                                        data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == !currentNumerator && groupName == it.group}
                                 }
                                 break
                             }
                         }
                     } else {
                         recyclerAdapter.data =
-                            data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == numerator}
+                            data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == numerator && groupName == it.group}
                     }
                 }
             } else {
