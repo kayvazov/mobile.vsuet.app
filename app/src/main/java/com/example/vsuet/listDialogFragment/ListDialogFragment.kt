@@ -87,7 +87,7 @@ class ListDialogFragment(
                     "Выходной"
                 apply {
                     val checkNum: Boolean =
-                        (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1)
+                        (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0)
                     responseMessage.text = when (pairTime) {
                         "Выходной" -> {
                             responseMessage.visibility = View.VISIBLE
@@ -143,13 +143,19 @@ class ListDialogFragment(
                     "Settings" -> {
                         adapter.data = entries!!
                         teacherNameFilter.visibility = View.VISIBLE
-                        teacherNameFilter.hint = SpannableStringBuilder("Номер группы")
-                        teacherNameFilter.addTextChangedListener {
-                            adapter.data = entries.filter {
-                                it.startsWith(
-                                    teacherNameFilter.text.toString(),
-                                    true
-                                )
+                        teacherNameFilter.post {
+                            val itemHeight = teacherNameFilter.height
+                            teacherNameFilter.addTextChangedListener {
+                                adapter.data = entries.filter {
+                                    it.startsWith(
+                                        teacherNameFilter.text.toString(),
+                                        true
+                                    )
+                                }
+
+                                val heightAdapter = listViewContainer.layoutParams
+                                heightAdapter.height = adapter.count * itemHeight
+
                             }
                         }
                     }

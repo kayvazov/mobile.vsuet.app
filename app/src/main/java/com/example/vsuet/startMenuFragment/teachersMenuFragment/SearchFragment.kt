@@ -54,7 +54,7 @@ class SearchFragment :
             lessonTable.layoutManager = LinearLayoutManager(requireContext())
             otherDayButton.text = dayOfWeek
             var numerator =
-                if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1) {
+                if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0) {
                     numeratorSwitch.text = "Числитель"
                     numeratorSwitch.isChecked = false
                     true
@@ -71,21 +71,14 @@ class SearchFragment :
                 var pairTime = ""
                 val recyclerAdapter = TeacherRecyclerViewAdapter()
                 viewModel.teacherLessons.observe(viewLifecycleOwner) { list ->
-                    println(list)
                     if(list.isNotEmpty()){
                         requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE).edit()
                             .putBoolean("isTeacherLessonsDBCreated", true).apply()
                     }
-
-                    println(
-                        dayContainer.text.toString()
-                            .lowercase(Locale.getDefault())
-                    )
                     if (list.any {
                             it.weekType == numerator && it.day == otherDayButton.text.toString()
                                 .lowercase(Locale.getDefault())
                         }) {
-                        println(list)
                         recyclerAdapter.data = list.filter {
                             it.weekType == numerator && it.day == otherDayButton.text.toString()
                                 .lowercase(Locale.getDefault())

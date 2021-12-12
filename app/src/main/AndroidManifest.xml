@@ -3,59 +3,71 @@
     package="com.example.vsuet">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
     <application
-        android:allowBackup="true"
         android:name=".VSUETApplication"
+        android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@drawable/vsuet_image"
         android:label="ВГУИТ"
         android:roundIcon="@drawable/vsuet_image"
         android:supportsRtl="true"
         android:theme="@style/Theme.PrepodSearch">
+        <service android:name=".NotificationService.NotificationService" />
+        <receiver
+            android:name=".NonStopNotificationBroadcast.NonstopServiceBroadcast"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <activity
-            android:launchMode="singleTop"
             android:name="com.example.vsuet.splashScreenActivity.SplashActivity"
             android:exported="true"
             android:label="ВГУИТ"
-            android:noHistory="true" >
+            android:launchMode="singleTop"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:launchMode="singleTop"
             android:name="com.example.vsuet.mainActivity.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing" >
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".scheduleWidget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
         <receiver
             android:name=".scheduleWidget.ScheduleWidget"
+            android:exported="true"
             android:icon="@android:drawable/star_big_on"
-            android:label="ScheduleWidget"
-            android:exported="true">
+            android:label="ScheduleWidget">
             <intent-filter>
-                <action
-                    android:name="android.appwidget.action.APPWIDGET_UPDATE">
-                </action>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"></action>
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_meta_data">
-            </meta-data>
+                android:resource="@xml/widget_meta_data"></meta-data>
         </receiver>
 
     </application>
-
 
 
 </manifest>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:elevation="2dp"
+    android:orientation="vertical"
     android:outlineProvider="bounds"
     android:paddingStart="10dp"
     android:paddingTop="15dp"
@@ -12,93 +13,36 @@
     android:paddingBottom="15dp">
 
     <TextView
-        android:id="@+id/lessonName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline36"
-        app:layout_constraintTop_toBottomOf="@+id/lessonIndicator" />
-
-    <TextView
-        android:id="@+id/lessonClass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="Кабинет: "
-        android:textSize="12sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline36"
-        app:layout_constraintTop_toBottomOf="@+id/lessonType" />
-
-    <TextView
-        android:id="@+id/lessonTeacher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:gravity="center"
-        android:text="Преподаватель: "
-        android:textSize="12sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline36"
-        app:layout_constraintTop_toBottomOf="@+id/lessonClass" />
-
-    <TextView
-        android:id="@+id/lessonTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:gravity="center"
-        android:text="Время пары: "
-        android:textSize="12sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline36"
-        app:layout_constraintTop_toBottomOf="@+id/lessonTeacher" />
-
-    <TextView
         android:id="@+id/lessonIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
         android:text="TextView"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline36"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline36"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.01" />
+        android:visibility="visible" />
 
     <TextView
-        android:id="@+id/lessonType"
-        android:layout_width="wrap_content"
+        android:id="@+id/widgetLesson"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:padding="4dp"
         android:text="TextView"
-        android:textSize="12sp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline36"
-        app:layout_constraintTop_toBottomOf="@+id/lessonName" />
+        android:textColor="#000000"
+        android:textSize="16sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/widgetTeacher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:text="Преподаватель: " />
+
+    <TextView
+        android:id="@+id/widgetTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:text="Время:" />
+</LinearLayout>

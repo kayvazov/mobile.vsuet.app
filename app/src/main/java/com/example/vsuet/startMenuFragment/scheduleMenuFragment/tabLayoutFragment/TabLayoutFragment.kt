@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vsuet.API.LessonProperty
 import com.example.vsuet.databinding.TabLayoutFragmentBinding
 import com.example.vsuet.lessonRecyclerView.LessonsRecyclerViewAdapter
+import java.text.SimpleDateFormat
 import java.util.*
 
 class TabLayoutFragment(
@@ -40,13 +41,13 @@ class TabLayoutFragment(
         }
 
         viewModelFactory = TabLayoutViewModelFactory(application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(TabLayoutViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory)[TabLayoutViewModel::class.java]
         val recyclerAdapter = LessonsRecyclerViewAdapter()
         val personalAccountSettings =
             requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE)
         val groupName = personalAccountSettings.getString("groupNumber", "Не указана группа")!!
         val podGroup = personalAccountSettings.getString("underGroupNumber", "1")!!
-        if(data.isNotEmpty()) {
+        if (data.isNotEmpty()) {
 
             val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
                 Calendar.TUESDAY -> "вторник"
@@ -64,17 +65,25 @@ class TabLayoutFragment(
             val startTimeMinutes = time.start.split(".")[1].toInt()
             val endTimeMinutes = time.end.split(".")[1].toInt()
 
-            val calendar = Calendar.getInstance()
-            val hours = calendar.get(Calendar.HOUR)
-            val minutes = calendar.get(Calendar.MINUTE)
+
+            println(endTimeHours)
+            println(endTimeMinutes)
+            val date = Date()
+            val formatterHours = SimpleDateFormat("HH")
+            val formatterMinutes = SimpleDateFormat("mm")
+            val hours = formatterHours.format(date).toInt()
+            val minutes = formatterMinutes.format(date).toInt()
+
+            println(hours)
+            println(minutes)
 
             val currentNumerator =
-                Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1
+                Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0
 
             if (groupName != "Не указана группа") {
                 recyclerAdapter.data =
-                    data.filter { it.day == day && it.weekType == numerator && it.subgroup == podGroup.toInt() && groupName == it.group}
-                if (recyclerAdapter.data.isEmpty() || (endTimeHours % 12 < hours || (endTimeMinutes < minutes && endTimeHours % 12 == hours)) && day == dayOfWeek) {
+                    data.filter { it.day == day && it.weekType == numerator && it.subgroup == podGroup.toInt() && groupName == it.group }
+                if (recyclerAdapter.data.isEmpty() || (endTimeHours < hours || (endTimeMinutes < minutes && endTimeHours == hours)) && day == dayOfWeek) {
                     binding.noLessonsText.visibility = View.VISIBLE
                     val noLessonsMargin =
                         binding.noLessonsText.layoutParams as ConstraintLayout.LayoutParams
@@ -90,29 +99,41 @@ class TabLayoutFragment(
                         "воскресенье"
                     )
                     for (i in days.indexOf(day) + 1 until days.size) {
-                        if (data.any { it.day == days[i] && it.weekType == currentNumerator && it.subgroup == podGroup.toInt() && groupName == it.group}) {
+                        if (data.any { it.day == days[i] && it.weekType == currentNumerator && it.subgroup == podGroup.toInt() && groupName == it.group }) {
                             nextDay = days[i]
                             break
                         }
                     }
+                    val dayList = listOf(
+                        "понедельник",
+                        "вторник",
+                        "среду",
+                        "четверг",
+                        "пятницу",
+                        "субботу",
+                        "воскресенье"
+                    )
                     if (nextDay == "") {
                         for (i in days) {
-                            if (data.any { it.day == i && it.weekType == !currentNumerator && it.subgroup == podGroup.toInt() && groupName == it.group}) {
+                            if (data.any { it.day == i && it.weekType == !currentNumerator && it.subgroup == podGroup.toInt() && groupName == it.group }) {
                                 nextDay = i
-                                println(nextDay)
                                 if (nextDay == "суббота" || nextDay == "восресенье") {
                                     recyclerAdapter.data =
-                                        data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == !currentNumerator && groupName == it.group}
+                                        data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == !currentNumerator && groupName == it.group }
                                 } else {
                                     recyclerAdapter.data =
-                                        data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == !currentNumerator && groupName == it.group}
+                                        data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == !currentNumerator && groupName == it.group }
                                 }
+                                val fineNextDayText = dayList[days.indexOf(nextDay)]
+                                    binding.noLessonsText.text = "На сегодня всё, пары на $fineNextDayText:"
                                 break
                             }
                         }
                     } else {
+                        val fineNextDayText = dayList[days.indexOf(nextDay)]
+                        binding.noLessonsText.text = "На сегодня всё, пары на $fineNextDayText:"
                         recyclerAdapter.data =
-                            data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == numerator && groupName == it.group}
+                            data.filter { it.day == nextDay && it.subgroup == podGroup.toInt() && it.weekType == numerator && groupName == it.group }
                     }
                 }
             } else {

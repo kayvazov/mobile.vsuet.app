@@ -1,6 +1,8 @@
 package com.example.vsuet.startMenuFragment.personalAccountFragment
 
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
@@ -8,9 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startForegroundService
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.vsuet.NotificationService.NotificationService
 import com.example.vsuet.R
 import com.example.vsuet.databinding.FragmentPersonalAccountBinding
 import com.example.vsuet.listDialogFragment.ListDialogFragment
@@ -128,6 +132,24 @@ class PersonalAccountFragment : Fragment() {
                 }
             }
 
+            val isPushOn = requireActivity().getSharedPreferences("accountSettings", Context.MODE_PRIVATE).getBoolean("isPushOn", false)
+            pushCheckBox.isChecked = isPushOn
+
+            pushCheckBox.setOnClickListener {
+                if(pushCheckBox.isChecked){
+                    settingsEditor.putBoolean("isPushOn", true).apply()
+                    val serviceIntent = Intent(requireActivity(), NotificationService::class.java)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        requireActivity().startForegroundService(serviceIntent)
+                    } else {
+                        requireActivity().startService(serviceIntent)
+                    }
+                } else {
+                    settingsEditor.putBoolean("isPushOn", false).apply()
+                    val serviceIntent = Intent(requireActivity(), NotificationService::class.java)
+                    requireActivity().stopService(serviceIntent)
+                }
+            }
             return root
         }
     }

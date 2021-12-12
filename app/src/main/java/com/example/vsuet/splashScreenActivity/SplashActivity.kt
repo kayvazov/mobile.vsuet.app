@@ -1,11 +1,14 @@
 package com.example.vsuet.splashScreenActivity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.example.vsuet.NonStopNotificationBroadcast.NonstopServiceBroadcast
 import com.example.vsuet.R
 import com.example.vsuet.databinding.ActivitySplashBinding
 import com.example.vsuet.mainActivity.MainActivity
@@ -14,9 +17,13 @@ import com.example.vsuet.mainActivity.MainActivity
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
+    private val broadcast = "com.example.vsuet.NonStopNotificationBroadcast"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.apply {

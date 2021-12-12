@@ -1,15 +1,10 @@
 package com.example.vsuet.startMenuFragment.scheduleMenuFragment
 
 import android.content.Context
-import android.content.Intent
-import android.nfc.NdefMessage
-import android.nfc.NfcAdapter
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -31,16 +26,18 @@ class ScheduleFragment : Fragment() {
     ): View {
 
 
-
         binding = ScheduleFragmentBinding.inflate(inflater)
+        println(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR))
         var numerator =
-            if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1 % 2 == 1) {
+            if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0) {
                 binding.scheduleNumeratorButton.text = "Числитель"
                 true
             } else {
                 binding.scheduleNumeratorButton.text = "Знаменатель"
                 false
             }
+
+        println(numerator)
 
         val days = listOf("ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС")
 
@@ -109,7 +106,7 @@ class ScheduleFragment : Fragment() {
 
                 val day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
                 println(day)
-                binding.daysPager.setCurrentItem(day - 1, false)
+                binding.daysPager.setCurrentItem(day - 2, false)
 
             }
         }
@@ -126,7 +123,8 @@ class ScheduleFragment : Fragment() {
         }
     }
 
-    class ViewPagerInfiniteCallback(private val viewPager: ViewPager2) : ViewPager2.OnPageChangeCallback() {
+    class ViewPagerInfiniteCallback(private val viewPager: ViewPager2) :
+        ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
             when (position) {
@@ -135,7 +133,6 @@ class ScheduleFragment : Fragment() {
             }
         }
     }
-
 
 
 }
