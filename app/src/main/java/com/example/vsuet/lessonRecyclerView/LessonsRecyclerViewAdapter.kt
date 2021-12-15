@@ -190,5 +190,7 @@ class LessonsRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
             }
         }
 
+
+
     }
 }
