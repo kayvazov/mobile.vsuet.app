@@ -135,6 +135,7 @@ class NotificationService() : Service() {
         notificationHandler = Handler(Looper.myLooper()!!)
         notificationRunnable = Runnable {
             checkToDoTime()
+            println("working 1")
         }
         notificationHandler.postDelayed(notificationRunnable, 60000)
 
@@ -203,7 +204,7 @@ class NotificationService() : Service() {
                 }
             }
         }
-        println("it's Working")
+        println("working 2")
 
         notificationHandler.postDelayed(notificationRunnable, 60000)
     }

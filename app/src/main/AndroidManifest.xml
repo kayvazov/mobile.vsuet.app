@@ -14,7 +14,7 @@
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@drawable/vsuet_image"
-        android:label="ВГУИТ"
+        android:label="Помощник студента"
         android:roundIcon="@drawable/vsuet_image"
         android:supportsRtl="true"
         android:theme="@style/Theme.PrepodSearch">
@@ -31,7 +31,7 @@
         <activity
             android:name="com.example.vsuet.splashScreenActivity.SplashActivity"
             android:exported="true"
-            android:label="ВГУИТ"
+            android:label="Помощник студента"
             android:launchMode="singleTop"
             android:noHistory="true">
             <intent-filter>

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "587513334827",
-    "project_id": "vsuet-63840",
-    "storage_bucket": "vsuet-63840.appspot.com"
+    "project_number": "237535279133",
+    "project_id": "studenthelper-f4eda",
+    "storage_bucket": "studenthelper-f4eda.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:587513334827:android:27146165aa799ce3aaae6e",
+        "mobilesdk_app_id": "1:237535279133:android:78dae72d55dc833eb9aef4",
         "android_client_info": {
-          "package_name": "com.example.prepodsearch"
+          "package_name": "app.vsuet.mobile"
         }
       },
       "oauth_client": [
         {
-          "client_id": "587513334827-9bkfiihbi7a6390g3a9li1d8k4h9vkrf.apps.googleusercontent.com",
+          "client_id": "237535279133-o2n852j5qcrdba3ll93h0vo2q701oejo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCo9ZSlYb4AfcjIkU5xzAcFvAymlZPO1qU"
+          "current_key": "AIzaSyDjOrUxAShQU0BZkMGf007Z4rbJ1jMKCX4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "587513334827-9bkfiihbi7a6390g3a9li1d8k4h9vkrf.apps.googleusercontent.com",
+              "client_id": "237535279133-o2n852j5qcrdba3ll93h0vo2q701oejo.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -35,5 +35,5 @@
       }
     }
   ],
-  "configuration_version": "2"
+  "configuration_version": "1"
 }

@@ -137,6 +137,7 @@ class PersonalAccountFragment : Fragment() {
 
             pushCheckBox.setOnClickListener {
                 if(pushCheckBox.isChecked){
+                    println("PushIsOn")
                     settingsEditor.putBoolean("isPushOn", true).apply()
                     val serviceIntent = Intent(requireActivity(), NotificationService::class.java)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -145,6 +146,7 @@ class PersonalAccountFragment : Fragment() {
                         requireActivity().startService(serviceIntent)
                     }
                 } else {
+                    println("PushIsOff")
                     settingsEditor.putBoolean("isPushOn", false).apply()
                     val serviceIntent = Intent(requireActivity(), NotificationService::class.java)
                     requireActivity().stopService(serviceIntent)

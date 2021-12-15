@@ -142,6 +142,7 @@ class ListDialogFragment(
                     }
                     "Settings" -> {
                         adapter.data = entries!!
+                        teacherNameFilter.hint = SpannableStringBuilder("Номер группы")
                         teacherNameFilter.visibility = View.VISIBLE
                         teacherNameFilter.post {
                             val itemHeight = teacherNameFilter.height

@@ -23,6 +23,9 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
         AppWidgetManager.INVALID_APPWIDGET_ID
     )
 
+    private val breakList = mutableListOf<LessonProperty>()
+
+    private var nextPairTime = "0"
     private lateinit var data: List<LessonProperty>
     private var schedule = MutableLiveData<List<LessonProperty>>()
     private val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
@@ -131,27 +134,34 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
 
                 val appWidgetManager = AppWidgetManager.getInstance(context)
                 appWidgetManager.updateAppWidget(widgetId, views)
-                appWidgetManager.updateAppWidget(
-                    widgetId,
-                    RemoteViews(context.packageName, R.layout.widget_list_view_item)
-                )
-
             }
         }
     }
 
+    private fun timeComparator(firstTime: List<String>, secondTime: List<String>): Boolean {
+
+        return if (firstTime[0] != "" && secondTime[0] != "" && firstTime[0] != secondTime[0]) {
+            firstTime[0].toInt() > secondTime[0].toInt()
+        } else {
+            if (firstTime[1] != "" && secondTime[1] != "") {
+                firstTime[1].toInt() >= secondTime[1].toInt()
+            } else {
+                if (firstTime[1] == "" && secondTime[1] == "") {
+                    true
+                } else firstTime[1] != ""
+            }
+        }
+
+
+    }
+
     override fun getViewAt(p0: Int): RemoteViews {
+        println("GOT IT")
         val remoteViews = RemoteViews(context.packageName, R.layout.widget_list_view_item)
         val item = data[p0]
         remoteViews.setTextViewText(R.id.widgetTeacher, item.teacher)
         remoteViews.setTextViewText(R.id.widgetLesson, item.name)
         remoteViews.setTextViewText(R.id.widgetTime, item.time.start + "-" + item.time.end)
-        println("????")
-        val date = Date()
-        val formatterHours = SimpleDateFormat("HH")
-        val formatterMinutes = SimpleDateFormat("mm")
-        val hours = formatterHours.format(date).toInt()
-        val minutes = formatterMinutes.format(date).toInt()
         val dayOfWeek = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
             Calendar.TUESDAY -> "вторник"
             Calendar.WEDNESDAY -> "среда"
@@ -162,30 +172,107 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
             else -> "понедельник"
         }
 
-        val startTimeHours = item.time.start.split(".")[0].toInt()
-        val endTimeHours = item.time.end.split(".")[0].toInt()
-        val startTimeMinutes = item.time.start.split(".")[1].toInt()
-        val endTimeMinutes = item.time.end.split(".")[1].toInt()
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        println(startTimeHours)
-        println(hours)
-        println(endTimeHours)
-        if (((startTimeHours < hours && endTimeHours >= hours && endTimeMinutes < minutes) || (startTimeHours < hours && endTimeHours > hours) || ((startTimeHours == hours && startTimeMinutes > minutes) || (endTimeHours == hours && endTimeMinutes < minutes))) && item.day == dayOfWeek) {
-            println("CURRENT")
-            remoteViews.setTextViewText(R.id.lessonIndicator, "Занятие идёт")
-            remoteViews.setTextColor(R.id.lessonIndicator, Color.parseColor("#FF0000"))
-            item.time.isCurrent = true
-        } else if (data.indexOf(item) != 0) {
-            if (data[p0 - 1].time.isCurrent) {
-                item.time.isCurrent = false
-                remoteViews.setTextViewText(R.id.lessonIndicator, "Следующая пара")
-            } else {
-                item.time.isCurrent = false
-                remoteViews.setViewVisibility(R.id.lessonIndicator, View.GONE)
+        val date = Date()
+        val formatterHours = SimpleDateFormat("HH")
+        val formatterMinutes = SimpleDateFormat("mm")
+        val hours = formatterHours.format(date)
+        val minutes = formatterMinutes.format(date)
+        val hoursMinutes = listOf(hours, minutes)
+
+        val pairTimeVaries = listOf(
+            "8.00-9.45",
+            "9.45-11.20",
+            "11.50-13.25",
+            "13.35-15.10",
+            "15.20-16.55",
+            "17.05-18.40",
+            "18.50-20.25"
+        )
+        val pairTime = if (timeComparator(hoursMinutes, "8:00".split(":")) && timeComparator(
+                "9:35".split(":"),
+                hoursMinutes
+            )
+        ) {
+            pairTimeVaries[0]
+        } else if (timeComparator(
+                hoursMinutes,
+                "9:45".split(":")
+            ) && timeComparator("11:20".split(":"), hoursMinutes)
+        ) {
+            pairTimeVaries[1]
+        } else if (timeComparator(hoursMinutes, "11:50".split(":")) && timeComparator(
+                "13:25".split(
+                    ":"
+                ), hoursMinutes
+            )
+        ) {
+            pairTimeVaries[2]
+        } else if (timeComparator(hoursMinutes, "13:35".split(":")) && timeComparator(
+                "15:10".split(
+                    ":"
+                ), hoursMinutes
+            )
+        ) {
+            pairTimeVaries[3]
+        } else if (timeComparator(hoursMinutes, "15:20".split(":")) && timeComparator(
+                "16:55".split(
+                    ":"
+                ), hoursMinutes
+            )
+        ) {
+            pairTimeVaries[4]
+        } else if (timeComparator(hoursMinutes, "17:05".split(":")) && timeComparator(
+                "18:40".split(
+                    ":"
+                ), hoursMinutes
+            )
+        ) {
+            pairTimeVaries[5]
+        } else if (timeComparator(hoursMinutes, "18:50".split(":")) && timeComparator(
+                "20:25".split(
+                    ":"
+                ), hoursMinutes
+            )
+        ) {
+            pairTimeVaries[6]
+        } else "Перерыв"
+
+
+        val currentLessonTime = item.time.start + "-" + item.time.end
+        if (pairTime == "Перерыв") {
+            for (i in data) {
+                if (timeComparator(i.time.start.split("."), hoursMinutes)) {
+                    breakList.add(i)
+                }
             }
+        }
+        println("NextPair")
+        println(nextPairTime)
+        if (currentLessonTime == pairTime && item.day == dayOfWeek) {
+            remoteViews.setTextViewText(R.id.lessonIndicator, "Занятие идёт")
+            remoteViews.setViewVisibility(R.id.lessonIndicator, View.VISIBLE)
+            remoteViews.setTextColor(R.id.lessonIndicator, Color.parseColor("#FF0000"))
+        } else if (nextPairTime == currentLessonTime) {
+            remoteViews.setViewVisibility(R.id.lessonIndicator, View.VISIBLE)
+            remoteViews.setTextViewText(R.id.lessonIndicator, "Следующая пара")
         } else {
-            item.time.isCurrent = false
             remoteViews.setViewVisibility(R.id.lessonIndicator, View.GONE)
+        }
+
+        if (data.indexOf(item) + 1 < data.size) {
+            nextPairTime = when (pairTime) {
+                "Перерыв" -> {
+                    breakList.first().time.start + "-" + breakList.first().time.end
+                }
+                currentLessonTime -> {
+                    data[data.indexOf(item) + 1].time.start + "-" + data[data.indexOf(
+                        item
+                    ) + 1].time.end
+                }
+                else -> {
+                    "0"
+                }
+            }
         }
 
         return remoteViews
@@ -196,7 +283,8 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
     }
 
     override fun onDataSetChanged() {
-
+        println("dataSetUpdated")
+        getRealSchedule()
     }
 
     override fun onDestroy() {

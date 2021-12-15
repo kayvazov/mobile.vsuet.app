@@ -27,7 +27,6 @@ class ScheduleFragment : Fragment() {
 
 
         binding = ScheduleFragmentBinding.inflate(inflater)
-        println(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR))
         var numerator =
             if (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0) {
                 binding.scheduleNumeratorButton.text = "Числитель"
