@@ -29,6 +29,7 @@ class PersonalAccountViewModel(application: Application, val repositoryDataSourc
                             call: Call<GroupProperty>,
                             response: Response<GroupProperty>
                         ) {
+                            println("it's fine")
                             internetConnection.value = true
                             groups.value = response.body()?.data
                             if (response.body()?.data != null && response.body()?.data!!.isNotEmpty()) {
@@ -37,6 +38,7 @@ class PersonalAccountViewModel(application: Application, val repositoryDataSourc
                         }
 
                         override fun onFailure(call: Call<GroupProperty>, t: Throwable) {
+                            println("it's NOT fine")
                             println(t.message)
                             internetConnection.value = false
                         }

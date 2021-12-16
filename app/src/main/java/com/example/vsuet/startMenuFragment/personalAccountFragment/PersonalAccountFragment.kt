@@ -76,6 +76,7 @@ class PersonalAccountFragment : Fragment() {
 
             viewModel.getGroups()
             viewModel.groups.observeForever { list ->
+                println("?")
                 val groupNames = list.map { it.name }.toMutableList()
                 groupTextButton.setOnClickListener {
                     val dialog = ListDialogFragment("Settings", null, groupNames)

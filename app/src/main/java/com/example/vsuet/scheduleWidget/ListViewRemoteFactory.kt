@@ -75,7 +75,6 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
         val group = account.getString("groupNumber", "0")
         val subgroup = account.getString("underGroupNumber", "1")
         schedule.observeForever { list ->
-            println(list)
             val currentNumerator = (Calendar.getInstance()
                 .get(Calendar.WEEK_OF_YEAR) % 2 == 0)
             data = list.filter {
