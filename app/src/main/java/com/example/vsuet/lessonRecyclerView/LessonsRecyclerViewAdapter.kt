@@ -124,7 +124,7 @@ class LessonsRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
 
 
         val currentLessonTime = item.time.start + "-" + item.time.end
-        if (pairTime == "Перерыв") {
+        if (data.isNotEmpty() && pairTime == "Перерыв") {
             for (i in data) {
                 if (timeComparator(i.time.start.split("."), hoursMinutes)) {
                     breakList.add(i)
@@ -178,7 +178,7 @@ class LessonsRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
 
         }
 
-        if (data.indexOf(item) + 1 < data.size) {
+        if (data.isNotEmpty() && breakList.isNotEmpty() && data.indexOf(item) + 1 < data.size) {
             nextPairTime = if (pairTime == "Перерыв") {
                 breakList.first().time.start + "-" + breakList.first().time.end
             } else if(pairTime == currentLessonTime) {

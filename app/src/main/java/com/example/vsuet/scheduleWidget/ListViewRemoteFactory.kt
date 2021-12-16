@@ -56,9 +56,6 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
     }
 
     override fun getCount(): Int {
-        while (data.isEmpty()) {
-
-        }
         return data.size
     }
 
@@ -80,8 +77,18 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
             data = list.filter {
                 it.day == dayOfWeek && it.weekType == currentNumerator && it.group == group && it.subgroup == subgroup!!.toInt()
             }
+            val time = data.last().time
+            val startTimeHours = time.start.split(".")[0].toInt()
+            val endTimeHours = time.end.split(".")[0].toInt()
+            val startTimeMinutes = time.start.split(".")[1].toInt()
+            val endTimeMinutes = time.end.split(".")[1].toInt()
+            val date = Date()
+            val formatterHours = SimpleDateFormat("HH")
+            val formatterMinutes = SimpleDateFormat("mm")
+            val hours = formatterHours.format(date).toInt()
+            val minutes = formatterMinutes.format(date).toInt()
             views.setViewVisibility(R.id.widgetNoLessons, View.GONE)
-            if (data.isEmpty()) {
+            if ((data.isEmpty() || (endTimeHours < hours || (endTimeMinutes < minutes && endTimeHours == hours))) && dayOfWeek == dayOfWeek) {
                 var nextDay = ""
                 val days = listOf(
                     "понедельник",
@@ -93,7 +100,7 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
                     "воскресенье"
                 )
                 for (i in days.indexOf(dayOfWeek) + 1 until days.size) {
-                    if (data.any { it.day == days[i] && it.weekType == currentNumerator && it.subgroup == subgroup!!.toInt() && group == it.group }) {
+                    if (list.any { it.day == days[i] && it.weekType == currentNumerator && it.subgroup == subgroup!!.toInt() && group == it.group }) {
                         nextDay = days[i]
                         break
                     }
@@ -112,7 +119,6 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
                                 "воскресенье"
                             )
                             val fineNextDayText = dayList[days.indexOf(nextDay)]
-                            println("we got here")
                             views.setViewVisibility(R.id.widgetNoLessons, View.VISIBLE)
                             views.setTextViewText(
                                 R.id.widgetNoLessons,
@@ -127,6 +133,22 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
                         }
                     }
                 } else {
+                    println(nextDay)
+                    val dayList = listOf(
+                        "понедельник",
+                        "вторник",
+                        "среду",
+                        "четверг",
+                        "пятницу",
+                        "субботу",
+                        "воскресенье"
+                    )
+                    val fineNextDayText = dayList[days.indexOf(nextDay)]
+                    views.setViewVisibility(R.id.widgetNoLessons, View.VISIBLE)
+                    views.setTextViewText(
+                        R.id.widgetNoLessons,
+                        "На сегодня всё, пары на $fineNextDayText:"
+                    )
                     data =
                         list.filter { it.day == nextDay && it.subgroup == subgroup!!.toInt() && it.weekType == currentNumerator && group == it.group }
                 }
@@ -238,7 +260,7 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
 
 
         val currentLessonTime = item.time.start + "-" + item.time.end
-        if (pairTime == "Перерыв") {
+        if (data.isNotEmpty() && pairTime == "Перерыв") {
             for (i in data) {
                 if (timeComparator(i.time.start.split("."), hoursMinutes)) {
                     breakList.add(i)
@@ -258,7 +280,7 @@ class ListViewRemoteFactory(val context: Context, val intent: Intent) :
             remoteViews.setViewVisibility(R.id.lessonIndicator, View.GONE)
         }
 
-        if (data.indexOf(item) + 1 < data.size) {
+        if (data.isNotEmpty() && breakList.isNotEmpty() && data.indexOf(item) + 1 < data.size) {
             nextPairTime = when (pairTime) {
                 "Перерыв" -> {
                     breakList.first().time.start + "-" + breakList.first().time.end

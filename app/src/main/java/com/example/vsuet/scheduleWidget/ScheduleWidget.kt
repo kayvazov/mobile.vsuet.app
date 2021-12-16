@@ -59,13 +59,13 @@ class ScheduleWidget : AppWidgetProvider() {
         }
 
 
-        updateHandler.postDelayed(updateRunnable, 10000)
+        updateHandler.postDelayed(updateRunnable, 60000)
 
     }
 
     fun updateLoop(){
         println("working 1")
-        updateHandler.postDelayed(updateRunnable, 10000)
+        updateHandler.postDelayed(updateRunnable, 60000)
     }
 
 
