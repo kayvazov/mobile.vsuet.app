@@ -13,9 +13,9 @@
         android:name=".VSUETApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@drawable/vsuet_image"
+        android:icon="@drawable/splash_vsuet_image"
         android:label="Помощник студента"
-        android:roundIcon="@drawable/vsuet_image"
+        android:roundIcon="@drawable/splash_vsuet_image"
         android:supportsRtl="true"
         android:theme="@style/Theme.PrepodSearch">
         <service android:name=".NotificationService.NotificationService" />

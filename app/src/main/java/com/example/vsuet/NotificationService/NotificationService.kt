@@ -73,7 +73,7 @@ class NotificationService() : Service() {
         var notification = builder
             .setContentTitle("Пары")
             .setContentText("Уведомления подключены")
-            .setSmallIcon(R.drawable.vsuet_image)
+            .setSmallIcon(R.drawable.splash_vsuet_image)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setSound(null)
@@ -86,9 +86,9 @@ class NotificationService() : Service() {
             notification = builder
                 .setContentTitle(lesson.name)
                 .setContentText("${lesson.audience} каб. ${lesson.time.start}")
-                .setSmallIcon(R.drawable.vsuet_image)
+                .setSmallIcon(R.drawable.splash_vsuet_image)
                 .setSound(null)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.vsuet_image))
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.splash_vsuet_image))
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
                 .setStyle(

@@ -64,8 +64,8 @@ class LessonsRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
         val hoursMinutes = listOf(hours, minutes)
 
         val pairTimeVaries = listOf(
-            "8.00-9.45",
-            "9.45-11.20",
+            "08.00-9.45",
+            "09.45-11.20",
             "11.50-13.25",
             "13.35-15.10",
             "15.20-16.55",
@@ -159,7 +159,8 @@ class LessonsRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
             }
 
             var numerator =
-                Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) % 2 == 0
+                ((Calendar.getInstance()
+                    .get(Calendar.WEEK_OF_YEAR) - 1) % 2 == 0)
 
 
             val nameMarginToChange = lessonName.layoutParams as ConstraintLayout.LayoutParams
@@ -178,10 +179,10 @@ class LessonsRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
 
         }
 
-        if (data.isNotEmpty() && breakList.isNotEmpty() && data.indexOf(item) + 1 < data.size) {
-            nextPairTime = if (pairTime == "Перерыв") {
+        if (data.isNotEmpty() && data.indexOf(item) + 1 < data.size) {
+            nextPairTime = if (pairTime == "Перерыв" && breakList.isNotEmpty()) {
                 breakList.first().time.start + "-" + breakList.first().time.end
-            } else if(pairTime == currentLessonTime) {
+            } else if (pairTime == currentLessonTime) {
                 data[data.indexOf(item) + 1].time.start + "-" + data[data.indexOf(
                     item
                 ) + 1].time.end
@@ -189,7 +190,6 @@ class LessonsRecyclerViewAdapter : RecyclerView.Adapter<LessonViewHolder>() {
                 "0"
             }
         }
-
 
 
     }
